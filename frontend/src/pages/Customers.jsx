@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Layout from "../components/Layout"
 import apiClient from "../components/ApiClient"
-import { Plus, Trash2 } from "lucide-react"
+import { Plus, Trash2 } from 'lucide-react'
 
 export default function Customers() {
   const [customers, setCustomers] = useState([])
@@ -24,10 +24,14 @@ export default function Customers() {
 
   const fetchCustomers = async () => {
     try {
+      console.log("[v0] Fetching customers from API")
       const res = await apiClient.get("/customers")
-      setCustomers(res.data)
+      console.log("[v0] Customers fetched:", res.data)
+      setCustomers(res.data || [])
     } catch (err) {
-      console.error("Failed to fetch customers:", err)
+      console.error("[v0] Failed to fetch customers:", err.response?.status, err.message)
+      alert("Failed to load customers. Make sure backend is running at http://localhost:5000")
+      setCustomers([])
     } finally {
       setLoading(false)
     }
@@ -36,26 +40,25 @@ export default function Customers() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await apiClient.post("/customers", {
-        ...formData,
-        meta: {},
-      })
+      await apiClient.post("/customers", formData)
       setFormData({ name: "", email: "", phone: "", gstin: "", state_code: "", address: "" })
       setShowForm(false)
       fetchCustomers()
     } catch (err) {
       console.error("Failed to create customer", err)
-      alert("Error: " + (err.response?.data?.error || "Server error"))
     }
   }
 
   const handleDelete = async (id) => {
     if (confirm("Delete this customer?")) {
       try {
+        console.log("[v0] Deleting customer:", id)
         await apiClient.delete(`/customers/${id}`)
+        console.log("[v0] Customer deleted successfully")
         fetchCustomers()
       } catch (err) {
-        console.error("Failed to delete customer", err)
+        console.error("[v0] Failed to delete customer:", err.response?.status, err.message)
+        alert("Failed to delete customer: " + (err.response?.data?.error || err.message))
       }
     }
   }
@@ -76,17 +79,49 @@ export default function Customers() {
         {showForm && (
           <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {["name", "email", "phone", "gstin", "state_code", "address"].map((field) => (
-                <input
-                  key={field}
-                  type="text"
-                  placeholder={field.replace("_", " ").toUpperCase()}
-                  value={formData[field]}
-                  onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
-                  required={field === "name"}
-                  className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                />
-              ))}
+              <input
+                type="text"
+                placeholder="Name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+                className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+              <input
+                type="tel"
+                placeholder="Phone"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+              <input
+                type="text"
+                placeholder="GSTIN"
+                value={formData.gstin}
+                onChange={(e) => setFormData({ ...formData, gstin: e.target.value })}
+                className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+              <input
+                type="text"
+                placeholder="State Code"
+                value={formData.state_code}
+                onChange={(e) => setFormData({ ...formData, state_code: e.target.value })}
+                className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+              <input
+                type="text"
+                placeholder="Address"
+                value={formData.address}
+                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              />
             </div>
             <div className="flex gap-2">
               <button type="submit" className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">

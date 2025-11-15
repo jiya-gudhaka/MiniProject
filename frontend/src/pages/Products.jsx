@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Layout from "../components/Layout"
 import apiClient from "../components/ApiClient"
-import { Plus, Trash2 } from "lucide-react"
+import { Plus, Trash2 } from 'lucide-react'
 
 export default function Products() {
   const [products, setProducts] = useState([])
@@ -23,10 +23,14 @@ export default function Products() {
 
   const fetchProducts = async () => {
     try {
+      console.log("[v0] Fetching products from API")
       const res = await apiClient.get("/products")
-      setProducts(res.data)
+      console.log("[v0] Products fetched:", res.data)
+      setProducts(res.data || [])
     } catch (err) {
-      console.error("Failed to fetch products", err)
+      console.error("[v0] Failed to fetch products:", err.response?.status, err.message)
+      alert("Failed to load products. Make sure backend is running at http://localhost:5000")
+      setProducts([])
     } finally {
       setLoading(false)
     }
@@ -52,10 +56,13 @@ export default function Products() {
   const handleDelete = async (id) => {
     if (confirm("Delete this product?")) {
       try {
+        console.log("[v0] Deleting product:", id)
         await apiClient.delete(`/products/${id}`)
+        console.log("[v0] Product deleted successfully")
         fetchProducts()
       } catch (err) {
-        console.error("Failed to delete product", err)
+        console.error("[v0] Failed to delete product:", err.response?.status, err.message)
+        alert("Failed to delete product: " + (err.response?.data?.error || err.message))
       }
     }
   }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Layout from "../components/Layout"
 import apiClient from "../components/ApiClient"
-import { BarChart3, TrendingUp, Users } from "lucide-react"
+import { BarChart3, TrendingUp, Users } from 'lucide-react'
 
 export default function Reports() {
   const [reports, setReports] = useState({
@@ -61,11 +61,11 @@ export default function Reports() {
                 </div>
                 <div className="p-4 bg-green-50 rounded-lg">
                   <p className="text-gray-600 text-sm">Total Sales</p>
-                  <p className="text-2xl font-bold text-green-600">₹{reports.sales.total_sales?.toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-green-600">₹{(Number(reports.sales.total_sales) || 0).toFixed(2)}</p>
                 </div>
                 <div className="p-4 bg-purple-50 rounded-lg">
                   <p className="text-gray-600 text-sm">Avg Invoice</p>
-                  <p className="text-2xl font-bold text-purple-600">₹{reports.sales.avg_invoice_value?.toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-purple-600">₹{(Number(reports.sales.avg_invoice_value) || 0).toFixed(2)}</p>
                 </div>
               </div>
             </div>
@@ -78,19 +78,19 @@ export default function Reports() {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-orange-50 rounded-lg">
                   <p className="text-gray-600 text-sm">Total CGST</p>
-                  <p className="text-2xl font-bold text-orange-600">₹{reports.tax.total_cgst?.toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-orange-600">₹{(Number(reports.tax.total_cgst) || 0).toFixed(2)}</p>
                 </div>
                 <div className="p-4 bg-red-50 rounded-lg">
                   <p className="text-gray-600 text-sm">Total SGST</p>
-                  <p className="text-2xl font-bold text-red-600">₹{reports.tax.total_sgst?.toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-red-600">₹{(Number(reports.tax.total_sgst) || 0).toFixed(2)}</p>
                 </div>
                 <div className="p-4 bg-yellow-50 rounded-lg">
                   <p className="text-gray-600 text-sm">Total IGST</p>
-                  <p className="text-2xl font-bold text-yellow-600">₹{reports.tax.total_igst?.toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-yellow-600">₹{(Number(reports.tax.total_igst) || 0).toFixed(2)}</p>
                 </div>
                 <div className="p-4 bg-indigo-50 rounded-lg">
                   <p className="text-gray-600 text-sm">Total Tax</p>
-                  <p className="text-2xl font-bold text-indigo-600">₹{reports.tax.total_tax?.toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-indigo-600">₹{(Number(reports.tax.total_tax) || 0).toFixed(2)}</p>
                 </div>
               </div>
             </div>
@@ -115,7 +115,7 @@ export default function Reports() {
                         <tr key={customer.id} className="border-t">
                           <td className="px-4 py-2">{customer.name}</td>
                           <td className="px-4 py-2">{customer.invoice_count}</td>
-                          <td className="px-4 py-2 font-semibold">₹{customer.total_spent?.toFixed(2)}</td>
+                          <td className="px-4 py-2 font-semibold">₹{(Number(customer.total_spent) || 0).toFixed(2)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -132,7 +132,7 @@ export default function Reports() {
                   {reports.expenses.map((expense, idx) => (
                     <div key={idx} className="p-4 border rounded-lg">
                       <p className="text-gray-600 text-sm font-medium">{expense.category}</p>
-                      <p className="text-xl font-bold">₹{expense.total_amount?.toFixed(2)}</p>
+                      <p className="text-xl font-bold">₹{(Number(expense.total_amount) || 0).toFixed(2)}</p>
                       <p className="text-xs text-gray-500 mt-1">{expense.count} entries</p>
                     </div>
                   ))}

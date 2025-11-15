@@ -76,12 +76,6 @@ export default function LoginPage() {
           <Link to="/signup" className="text-blue-600 hover:text-blue-700 font-semibold">
             Sign Up
           </Link>
-          <br />
-          <span className="text-xs text-gray-500 mt-2 block">
-            Demo: admin@example.com / password123
-            <br />
-            Dev Mode: Using mock data. Connect backend to enable real database.
-          </span>
         </p>
       </div>
     </div>

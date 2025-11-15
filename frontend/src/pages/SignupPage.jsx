@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import apiClient from "../components/ApiClient"
@@ -11,25 +11,10 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
-  const [branchId, setBranchId] = useState("")
-  const [branches, setBranches] = useState([])
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const { login } = useAuth()
-
-  // Fetch branches on load
-  useEffect(() => {
-    const fetchBranches = async () => {
-      try {
-        const res = await apiClient.get("/branches")
-        setBranches(res.data)
-      } catch (err) {
-        console.error("Error fetching branches:", err)
-      }
-    }
-    fetchBranches()
-  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -45,23 +30,17 @@ export default function SignupPage() {
       return
     }
 
-    if (!branchId) {
-      setError("Please select a branch")
-      return
-    }
-
     setLoading(true)
 
     try {
       const res = await apiClient.post("/auth/register", {
-        name: `${firstName} ${lastName}`,
+        name: firstName + " " + lastName,
         email,
         password,
-        role: "admin",
-        organizationId: 1,
-        branchId: parseInt(branchId),
+        role: "accountant",
+        organizationId: 1,  // Default organization ID
+        branchId: 1,        // Default branch ID
       })
-
       login(res.data.user, res.data.token)
       navigate("/dashboard")
     } catch (err) {
@@ -116,23 +95,6 @@ export default function SignupPage() {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               placeholder="your@email.com"
             />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Branch</label>
-            <select
-              value={branchId}
-              onChange={(e) => setBranchId(e.target.value)}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            >
-              <option value="">Select Branch</option>
-              {branches.map((branch) => (
-                <option key={branch.id} value={branch.id}>
-                  {branch.name} ({branch.state_code})
-                </option>
-              ))}
-            </select>
           </div>
 
           <div>
