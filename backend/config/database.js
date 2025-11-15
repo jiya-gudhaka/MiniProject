@@ -1,16 +1,15 @@
-import pg from "pg"
-import dotenv from "dotenv"
+import pg from "pg";
+import dotenv from "dotenv";
 
-dotenv.config()
+dotenv.config();
 
-const { Pool } = pg
+const { Pool } = pg;
 
 const pool = new Pool({
-  user: process.env.DB_USER || "postgres",
-  password: process.env.DB_PASSWORD,
-  host: process.env.DB_HOST || "localhost",
-  port: process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME || "billing_app",
-})
+  connectionString: process.env.DB_URL,
+  ssl: {
+    rejectUnauthorized: false, // Required for many hosted DBs like Render/Railway/Neon
+  },
+});
 
-export default pool
+export default pool;

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Layout from "../components/Layout"
 import apiClient from "../components/ApiClient"
-import { BarChart3, Users, Package, FileText } from "lucide-react"
+import { BarChart3, Users, Package, FileText } from 'lucide-react'
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
@@ -17,21 +17,19 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [invoices, customers, products, sales] = await Promise.all([
-          apiClient.get("/invoices"),
-          apiClient.get("/customers"),
-          apiClient.get("/products"),
-          apiClient.get("/reports/sales/summary"),
-        ])
+        const invoices = await apiClient.get("/invoices").catch(() => ({ data: [] }))
+        const customers = await apiClient.get("/customers").catch(() => ({ data: [] }))
+        const products = await apiClient.get("/products").catch(() => ({ data: [] }))
+        const sales = await apiClient.get("/reports/sales/summary").catch(() => ({ data: { total_sales: 0 } }))
 
         setStats({
           invoices: invoices.data.length,
           customers: customers.data.length,
           products: products.data.length,
-          sales: sales.data.total_sales || 0,
+          sales: parseFloat(sales.data.total_sales) || 0,
         })
       } catch (err) {
-        console.error("Failed to fetch stats", err)
+        console.error("[v0] Failed to fetch stats", err)
       } finally {
         setLoading(false)
       }
@@ -62,7 +60,7 @@ export default function Dashboard() {
             <StatCard icon={FileText} label="Total Invoices" value={stats.invoices} color="bg-blue-600" />
             <StatCard icon={Users} label="Customers" value={stats.customers} color="bg-green-600" />
             <StatCard icon={Package} label="Products" value={stats.products} color="bg-purple-600" />
-            <StatCard icon={BarChart3} label="Total Sales" value={`₹${stats.sales.toFixed(2)}`} color="bg-orange-600" />
+            <StatCard icon={BarChart3} label="Total Sales" value={`₹${Number(stats.sales).toFixed(2)}`} color="bg-orange-600" />
           </div>
         )}
 
@@ -94,6 +92,13 @@ export default function Dashboard() {
               View Reports
             </a>
           </div>
+        </div>
+
+        <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+          <p className="text-sm text-yellow-800">
+            <strong>Note:</strong> The app is using mock data in preview mode. To connect to your real backend, run the
+            backend server at http://localhost:5000 and it will automatically connect.
+          </p>
         </div>
       </div>
     </Layout>

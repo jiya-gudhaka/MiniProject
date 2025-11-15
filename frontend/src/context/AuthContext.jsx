@@ -13,12 +13,11 @@ export function AuthProvider({ children }) {
     const savedToken = localStorage.getItem("token")
     if (savedToken) {
       setToken(savedToken)
-      // Decode token to get user info
       try {
         const payload = JSON.parse(atob(savedToken.split(".")[1]))
         setUser(payload)
       } catch (err) {
-        console.error("Invalid token")
+        console.error("[v0] Invalid token")
         localStorage.removeItem("token")
       }
     }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Layout from "../components/Layout"
 import apiClient from "../components/ApiClient"
-import { Plus, Eye } from "lucide-react"
+import { Plus, Eye } from 'lucide-react'
 
 export default function Invoices() {
   const [invoices, setInvoices] = useState([])
@@ -244,7 +244,7 @@ export default function Invoices() {
                   <tr key={inv.id} className="border-t hover:bg-gray-50">
                     <td className="px-6 py-3 font-mono text-sm">{inv.invoice_number}</td>
                     <td className="px-6 py-3">{inv.customer_name}</td>
-                    <td className="px-6 py-3 font-semibold">₹{inv.net_amount?.toFixed(2)}</td>
+                    <td className="px-6 py-3 font-semibold">₹{(Number(inv.net_amount) || 0).toFixed(2)}</td>
                     <td className="px-6 py-3">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-semibold ${

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Layout from "../components/Layout"
 import apiClient from "../components/ApiClient"
-import { Plus, Trash2 } from "lucide-react"
+import { Plus, Trash2 } from 'lucide-react'
 
 export default function Expenses() {
   const [expenses, setExpenses] = useState([])
@@ -153,7 +153,7 @@ export default function Expenses() {
                 {expenses.map((expense) => (
                   <tr key={expense.id} className="border-t hover:bg-gray-50">
                     <td className="px-6 py-3">{expense.category}</td>
-                    <td className="px-6 py-3 font-semibold">₹{expense.amount?.toFixed(2)}</td>
+                    <td className="px-6 py-3 font-semibold">₹{(Number(expense.amount) || 0).toFixed(2)}</td>
                     <td className="px-6 py-3">{expense.gst_percent}%</td>
                     <td className="px-6 py-3">{new Date(expense.expense_date).toLocaleDateString()}</td>
                     <td className="px-6 py-3 text-sm text-gray-600">{expense.notes}</td>
