@@ -1,0 +1,101 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import Layout from "../components/Layout"
+import apiClient from "../components/ApiClient"
+import { BarChart3, Users, Package, FileText } from "lucide-react"
+
+export default function Dashboard() {
+  const [stats, setStats] = useState({
+    invoices: 0,
+    customers: 0,
+    products: 0,
+    sales: 0,
+  })
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const [invoices, customers, products, sales] = await Promise.all([
+          apiClient.get("/invoices"),
+          apiClient.get("/customers"),
+          apiClient.get("/products"),
+          apiClient.get("/reports/sales/summary"),
+        ])
+
+        setStats({
+          invoices: invoices.data.length,
+          customers: customers.data.length,
+          products: products.data.length,
+          sales: sales.data.total_sales || 0,
+        })
+      } catch (err) {
+        console.error("Failed to fetch stats", err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchStats()
+  }, [])
+
+  const StatCard = ({ icon: Icon, label, value, color }) => (
+    <div className={`p-6 rounded-lg shadow-lg text-white ${color} flex items-center gap-4`}>
+      <Icon size={40} />
+      <div>
+        <p className="text-sm opacity-90">{label}</p>
+        <p className="text-2xl font-bold">{value}</p>
+      </div>
+    </div>
+  )
+
+  return (
+    <Layout>
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
+
+        {loading ? (
+          <div className="text-center py-12">Loading stats...</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <StatCard icon={FileText} label="Total Invoices" value={stats.invoices} color="bg-blue-600" />
+            <StatCard icon={Users} label="Customers" value={stats.customers} color="bg-green-600" />
+            <StatCard icon={Package} label="Products" value={stats.products} color="bg-purple-600" />
+            <StatCard icon={BarChart3} label="Total Sales" value={`₹${stats.sales.toFixed(2)}`} color="bg-orange-600" />
+          </div>
+        )}
+
+        <div className="bg-white p-6 rounded-lg shadow-lg">
+          <h2 className="text-xl font-bold mb-4">Quick Actions</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <a
+              href="/invoices"
+              className="p-4 bg-blue-50 hover:bg-blue-100 rounded-lg text-center font-semibold text-blue-600"
+            >
+              Create Invoice
+            </a>
+            <a
+              href="/customers"
+              className="p-4 bg-green-50 hover:bg-green-100 rounded-lg text-center font-semibold text-green-600"
+            >
+              Add Customer
+            </a>
+            <a
+              href="/products"
+              className="p-4 bg-purple-50 hover:bg-purple-100 rounded-lg text-center font-semibold text-purple-600"
+            >
+              Add Product
+            </a>
+            <a
+              href="/reports"
+              className="p-4 bg-orange-50 hover:bg-orange-100 rounded-lg text-center font-semibold text-orange-600"
+            >
+              View Reports
+            </a>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  )
+}
