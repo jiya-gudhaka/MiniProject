@@ -104,14 +104,7 @@ export default function Invoices() {
   }
 
   const handleViewInvoice = async (invoiceId) => {
-    try {
-      const response = await apiClient.get(`/invoices/${invoiceId}`)
-      setSelectedInvoice(response.data)
-      setShowInvoiceDetails(true)
-    } catch (error) {
-      console.error("Error fetching invoice:", error)
-      alert("Failed to load invoice details: " + (error.response?.data?.error || error.message))
-    }
+    window.location.href = `/invoices/${invoiceId}/preview`
   }
 
   const handleGeneratePDF = async (invoiceId) => {
@@ -537,11 +530,7 @@ export default function Invoices() {
                     <td className="px-6 py-3">{new Date(inv.issue_date).toLocaleDateString()}</td>
                     <td className="px-6 py-3">
                       <div className="flex gap-2">
-                        <button 
-                          onClick={() => handleViewInvoice(inv.id)}
-                          className="text-blue-600 hover:text-blue-800"
-                          title="View Invoice"
-                        >
+                        <button onClick={() => handleViewInvoice(inv.id)} className="text-blue-600 hover:text-blue-800" title="View Invoice">
                           <Eye size={18} />
                         </button>
                         <button
@@ -679,6 +668,35 @@ export default function Invoices() {
                   >
                     <Download size={18} />
                     Download PDF
+                  </button>
+                  <button
+                    onClick={async () => {
+                      try {
+                        const resp = await fetch(`http://localhost:5000/api/ewaybill/generate/${selectedInvoice.id}`, {
+                          method: "POST",
+                          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                        })
+                        if (!resp.ok) {
+                          const err = await resp.json().catch(() => ({ error: "Failed" }))
+                          alert("Failed to generate E-Way Bill: " + (err.error || resp.status))
+                          return
+                        }
+                        const blob = await resp.blob()
+                        const url = window.URL.createObjectURL(blob)
+                        const a = document.createElement("a")
+                        a.href = url
+                        a.download = `ewaybill_${selectedInvoice.id}.pdf`
+                        document.body.appendChild(a)
+                        a.click()
+                        document.body.removeChild(a)
+                        window.URL.revokeObjectURL(url)
+                      } catch (e) {
+                        alert("Error generating E-Way Bill: " + e.message)
+                      }
+                    }}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  >
+                    Generate E-Way Bill
                   </button>
                   <button
                     onClick={() => {

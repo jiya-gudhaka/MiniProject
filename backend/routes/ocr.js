@@ -277,6 +277,20 @@ router.post("/create-invoice", authMiddleware, async (req, res) => {
         }
       }
 
+      // Sanitize invoice number: drop generic terms, avoid duplicates per organization
+      let sanitizedInv = (invoice_number || "").toString().trim()
+      if (!sanitizedInv || /^(original|duplicate|copy|tax\s*invoice)$/i.test(sanitizedInv) || sanitizedInv.length < 3) {
+        sanitizedInv = null
+      } else {
+        const dupCheck = await client.query(
+          `SELECT 1 FROM invoices WHERE organization_id = $1 AND invoice_number = $2 LIMIT 1`,
+          [req.user.organizationId, sanitizedInv]
+        )
+        if (dupCheck.rows.length > 0) {
+          sanitizedInv = `${sanitizedInv}-${Date.now()}`
+        }
+      }
+
       const invoiceResult = await client.query(
         `INSERT INTO invoices (
           organization_id, customer_id, created_by, invoice_type, issue_date,
@@ -297,7 +311,7 @@ router.post("/create-invoice", authMiddleware, async (req, res) => {
           igst_amount,
           net_amount,
           "pending",
-          invoice_number || `INV-${Date.now()}`
+          sanitizedInv || `INV-${Date.now()}`
         ]
       )
 

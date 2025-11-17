@@ -29,6 +29,9 @@ import reportRoutes from "./routes/reports.js"
 import ocrRoutes from "./routes/ocr.js"
 import pdfRoutes from "./routes/pdf-generation.js"
 import reportGenRoutes from "./routes/report-generation.js"
+import branchesRoutes from "./routes/branches.js"
+import taxRoutes from "./routes/tax.js"
+import backupRoutes from "./routes/backup.js"
 
 app.use("/api/auth", authRoutes)
 app.use("/api/organizations", organizationRoutes)
@@ -41,6 +44,9 @@ app.use("/api/reports", reportRoutes)
 app.use("/api/ocr", ocrRoutes)
 app.use("/api/pdf", pdfRoutes)
 app.use("/api/report-gen", reportGenRoutes)
+app.use("/api/branches", branchesRoutes)
+app.use("/api/tax", taxRoutes)
+app.use("/api/backup", backupRoutes)
 
 const PORT = process.env.PORT || 5000
 

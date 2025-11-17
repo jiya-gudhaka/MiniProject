@@ -57,8 +57,16 @@ def extract_fields(raw_text: str) -> dict:
     full_text = " ".join(lines)
 
     # ----- Invoice Number -----
-    m = re.search(r'Invoice\s*(No\.?|Number)?[:\\s]*([A-Za-z0-9\-_]+)', full_text, re.I)
-    result['Invoice Number'] = m.group(2) if m else None
+    m = re.search(r'Invoice\s*(No\.?|Number)?[:\\s]*([A-Za-z0-9\-_/]+)', full_text, re.I)
+    inv = m.group(2) if m else None
+    if inv:
+        inv_clean = re.sub(r"[^A-Za-z0-9\-_/]", "", inv).strip()
+        # Ignore common non-IDs and values without any digits
+        if re.fullmatch(r"(?i)(original|duplicate|copy|tax\s*invoice)", inv_clean) or not re.search(r"\d", inv_clean):
+            inv_clean = None
+        result['Invoice Number'] = inv_clean
+    else:
+        result['Invoice Number'] = None
 
     # ----- Invoice Date -----
     dates = re.findall(r'\b(?:\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}|\d{1,2}\s+[A-Za-z]{3,9}\s+\d{4})\b', full_text)
