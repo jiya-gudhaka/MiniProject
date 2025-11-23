@@ -9,18 +9,37 @@ export default function InvoicePreview() {
   const { id } = useParams()
   const [invoice, setInvoice] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [editing, setEditing] = useState(false)
+  const [editForm, setEditForm] = useState({ issue_date: "", due_date: "" })
 
   useEffect(() => {
     const load = async () => {
       try {
         const res = await apiClient.get(`/invoices/${id}`)
         setInvoice(res.data)
+        setEditForm({
+          issue_date: res.data?.issue_date ? new Date(res.data.issue_date).toISOString().split('T')[0] : "",
+          due_date: res.data?.due_date ? new Date(res.data.due_date).toISOString().split('T')[0] : "",
+        })
       } catch (e) {
         setInvoice(null)
       } finally { setLoading(false) }
     }
     load()
   }, [id])
+
+  const saveDates = async () => {
+    try {
+      const res = await apiClient.put(`/invoices/${id}/dates`, {
+        issue_date: editForm.issue_date || null,
+        due_date: editForm.due_date || null,
+      })
+      setInvoice(res.data)
+      setEditing(false)
+    } catch (e) {
+      alert(e.response?.data?.error || e.message)
+    }
+  }
 
   return (
     <Layout>
@@ -37,7 +56,14 @@ export default function InvoicePreview() {
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-600">Date</label>
-                <p className="text-lg">{new Date(invoice.issue_date).toLocaleDateString()}</p>
+                {editing ? (
+                  <div className="flex gap-2">
+                    <input type="date" value={editForm.issue_date} onChange={(e) => setEditForm({ ...editForm, issue_date: e.target.value })} className="px-3 py-2 border rounded" />
+                    <input type="date" value={editForm.due_date} onChange={(e) => setEditForm({ ...editForm, due_date: e.target.value })} className="px-3 py-2 border rounded" />
+                  </div>
+                ) : (
+                  <p className="text-lg">{new Date(invoice.issue_date).toLocaleDateString()}</p>
+                )}
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-600">Customer</label>
@@ -47,6 +73,16 @@ export default function InvoicePreview() {
                 <label className="text-sm font-medium text-gray-600">Status</label>
                 <p className="text-lg">{invoice.payment_status}</p>
               </div>
+            </div>
+            <div className="flex gap-2">
+              {!editing ? (
+                <button onClick={() => setEditing(true)} className="px-4 py-2 bg-blue-600 text-white rounded">Edit Dates</button>
+              ) : (
+                <>
+                  <button onClick={saveDates} className="px-4 py-2 bg-green-600 text-white rounded">Save</button>
+                  <button onClick={() => setEditing(false)} className="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+                </>
+              )}
             </div>
 
             {invoice.items && invoice.items.length > 0 && (
@@ -67,10 +103,10 @@ export default function InvoicePreview() {
                       {invoice.items.map((item, idx) => (
                         <tr key={idx} className="border-t">
                           <td className="px-4 py-2">{item.description || "Item"}</td>
-                          <td className="px-4 py-2 text-right">{item.qty || item.quantity || 1}</td>
-                          <td className="px-4 py-2 text-right">₹{(item.price || 0).toFixed(2)}</td>
-                          <td className="px-4 py-2 text-right">{item.applied_gst_rate || 0}%</td>
-                          <td className="px-4 py-2 text-right">₹{((item.qty || item.quantity || 1) * (item.price || 0)).toFixed(2)}</td>
+                          <td className="px-4 py-2 text-right">{Number(item.qty ?? item.quantity ?? 1)}</td>
+                          <td className="px-4 py-2 text-right">₹{(Number(item.price ?? item.unit_price ?? 0)).toFixed(2)}</td>
+                          <td className="px-4 py-2 text-right">{Number(item.applied_gst_rate ?? item.gst_rate ?? 0)}%</td>
+                          <td className="px-4 py-2 text-right">₹{(Number(item.qty ?? item.quantity ?? 1) * Number(item.price ?? item.unit_price ?? 0)).toFixed(2)}</td>
                         </tr>
                       ))}
                     </tbody>

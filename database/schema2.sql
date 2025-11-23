@@ -201,6 +201,27 @@ CREATE TABLE IF NOT EXISTS purchase_bills (
   updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
 );
 
+-- Journal Entries Table
+CREATE TABLE IF NOT EXISTS journal_entries (
+  id BIGSERIAL PRIMARY KEY,
+  organization_id BIGINT REFERENCES organizations(id),
+  branch_id BIGINT,
+  entry_date DATE NOT NULL,
+  reference_no VARCHAR(50),
+  vendor_id BIGINT REFERENCES vendors(id),
+  description TEXT,
+  debit_account VARCHAR(100),
+  credit_account VARCHAR(100),
+  amount NUMERIC(12,2),
+  cgst_input NUMERIC(12,2) DEFAULT 0,
+  sgst_input NUMERIC(12,2) DEFAULT 0,
+  igst_input NUMERIC(12,2) DEFAULT 0,
+  total_amount NUMERIC(12,2),
+  entry_type VARCHAR(20) DEFAULT 'purchase',
+  ocr_json_path TEXT,
+  created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
+);
+
 -- Purchase Bill Items
 CREATE TABLE IF NOT EXISTS purchase_bill_items (
   id BIGSERIAL PRIMARY KEY,
