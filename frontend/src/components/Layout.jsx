@@ -29,64 +29,64 @@ export default function Layout({ children }) {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
-      <nav className="hidden md:flex flex-col w-64 bg-slate-900 text-white p-6 space-y-6">
-        <h1 className="text-2xl font-bold">Billing App</h1>
-        <div className="space-y-2">
-          {menuItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`block px-4 py-2 rounded-lg transition ${
-                location.pathname === item.path ? "bg-blue-600" : "hover:bg-slate-800"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-        <button
-          onClick={handleLogout}
-          className="mt-auto flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg"
-        >
-          <LogOut size={18} /> Logout
-        </button>
-      </nav>
-
-      {/* Mobile Header */}
-      <div className="md:hidden w-full flex flex-col">
-        <header className="bg-slate-900 text-white p-4 flex items-center justify-between">
-          <h1 className="text-xl font-bold">Billing App</h1>
-          <button onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button>
-        </header>
-
-        {menuOpen && (
-          <nav className="bg-slate-800 text-white p-4 space-y-2 md:hidden">
+    <div className="min-h-screen bg-white">
+      <header className="bg-blueZodiac text-white shadow-subtle">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <h1 className="text-lg font-semibold">INVOSMART</h1>
+          </div>
+          <nav className="hidden md:flex items-center gap-1">
             {menuItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className="block px-4 py-2 rounded-lg hover:bg-slate-700"
-                onClick={() => setMenuOpen(false)}
+                className={`px-3 py-2 rounded-xl text-sm font-medium transition ${
+                  location.pathname === item.path ? "bg-goldenDream text-blueZodiac" : "hover:bg-white/10"
+                }`}
               >
                 {item.label}
               </Link>
             ))}
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg"
+              className="ml-2 px-3 py-2 rounded-2xl bg-goldenDream text-blueZodiac text-sm font-semibold hover:bg-[#e6c82f] flex items-center gap-2"
             >
-              <LogOut size={18} /> Logout
+              <LogOut size={16} /> Logout
             </button>
           </nav>
+          <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+        {menuOpen && (
+          <div className="md:hidden px-4 pb-3">
+            <div className="rounded-2xl bg-blueZodiac/90 border border-white/10 overflow-hidden">
+              {menuItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`block px-4 py-3 text-sm ${
+                    location.pathname === item.path ? "bg-goldenDream text-blueZodiac" : "text-white hover:bg-white/10"
+                  }`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <button
+                onClick={handleLogout}
+                className="w-full text-left px-4 py-3 text-sm bg-goldenDream text-blueZodiac font-semibold"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
         )}
-      </div>
+      </header>
 
-      {/* Main Content */}
-      <div className="flex-1 overflow-auto">
-        <div className="p-6 md:p-8">{children}</div>
-      </div>
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+        {children}
+      </main>
     </div>
   )
 }

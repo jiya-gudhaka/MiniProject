@@ -3,5 +3,42 @@
 @tailwind utilities;
 
 body {
-  @apply m-0 p-0 font-sans;
+   @apply m-0 p-0 font-sans text-slate-800;
+  background-color: #ffffff;
 }
+
+@layer components {
+  .card { @apply bg-citrineWhite rounded-2xl shadow-subtle border border-slate-200; }
+  .card-title { @apply text-blueZodiac text-xl font-semibold mb-4 flex items-center gap-2; }
+  .chip { @apply px-2 py-1 rounded-full text-xs font-semibold; }
+  .chip-blue { @apply bg-hippieBlue/15 text-hippieBlue; }
+  .chip-gold { @apply bg-goldenDream text-blueZodiac; }
+  .chip-green { @apply bg-green-100 text-green-800; }
+  .chip-yellow { @apply bg-yellow-100 text-yellow-800; }
+  .chip-red { @apply bg-red-100 text-red-800; }
+  .stat-badge-up { @apply bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold; }
+  .stat-badge-down { @apply bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-semibold; }
+  .data-table { @apply w-full text-sm; }
+  .data-table thead { @apply bg-citrineWhite; }
+  .data-table th { @apply px-6 py-3 text-left font-semibold text-blueZodiac; }
+  .data-table td { @apply px-6 py-3; }
+  .data-table tbody tr { @apply border-t; }
+  .data-table tbody tr:hover { @apply bg-[#F7F5D6]; }
+  .table-toolbar { @apply flex items-center justify-between mb-3; }
+  .stat-card { @apply p-6 rounded-2xl shadow-subtle bg-citrineWhite border border-slate-200 flex items-center gap-4; }
+  .stat-icon { @apply p-3 rounded-xl bg-hippieBlue/15 text-hippieBlue; }
+  .chart-bars { @apply h-40 w-full flex items-end gap-2; }
+  .chart-bar { @apply flex-1 bg-hippieBlue rounded-xl; }
+  .donut-chart { width: 160px; height: 160px; border-radius: 50%; background: conic-gradient(#5B88B2 var(--p1,25%), #F0D637 0 var(--p2,55%), #122C4F 0 var(--p3,80%), #FBF9E3 0 100%); position: relative; }
+  .donut-chart::after { content: ""; position: absolute; inset: 22%; background: white; border-radius: 50%; }
+  .legend { @apply space-y-2; }
+  .legend-item { @apply flex items-center gap-2 text-sm; }
+  .legend-swatch { @apply w-3 h-3 rounded-full; }
+  .tooltip { @apply absolute -top-8 left-1/2 -translate-x-1/2 bg-blueZodiac text-white text-xs px-2 py-1 rounded-md shadow-subtle whitespace-nowrap; }
+  .hover-group { position: relative; }
+}
+  .card-top { position: relative; overflow: hidden; }
+  .card-top::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 16px; border-radius: 1rem 1rem 0 0; background: var(--card-top-color, #5B88B2); }
+  .card-top-hippieBlue { --card-top-color: #5B88B2; }
+  .card-top-goldenDream { --card-top-color: #F0D637; }
+  .card-top-blueZodiac { --card-top-color: #122C4F; }

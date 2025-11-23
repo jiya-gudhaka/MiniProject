@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import Layout from "../components/Layout"
 import apiClient from "../components/ApiClient"
+import { motion } from 'framer-motion'
+import { FaFileInvoice } from 'react-icons/fa'
 
 export default function InvoicePreview() {
   const { id } = useParams()
@@ -44,11 +46,13 @@ export default function InvoicePreview() {
   return (
     <Layout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold text-gray-800">Invoice Preview</h1>
+        <motion.h1 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="text-3xl font-semibold text-blueZodiac flex items-center gap-2">
+          <FaFileInvoice className="text-hippieBlue" size={28} /> Invoice Preview
+        </motion.h1>
         {loading ? (
           <div>Loading...</div>
         ) : invoice ? (
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card card-top card-top-hippieBlue p-8">
             <div className="grid grid-cols-2 gap-6 mb-6">
               <div>
                 <label className="text-sm font-medium text-gray-600">Invoice Number</label>
@@ -76,11 +80,11 @@ export default function InvoicePreview() {
             </div>
             <div className="flex gap-2">
               {!editing ? (
-                <button onClick={() => setEditing(true)} className="px-4 py-2 bg-blue-600 text-white rounded">Edit Dates</button>
+                <button onClick={() => setEditing(true)} className="px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">Edit Dates</button>
               ) : (
                 <>
-                  <button onClick={saveDates} className="px-4 py-2 bg-green-600 text-white rounded">Save</button>
-                  <button onClick={() => setEditing(false)} className="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+                  <button onClick={saveDates} className="px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">Save</button>
+                  <button onClick={() => setEditing(false)} className="px-4 py-2 bg-gray-300 rounded-2xl">Cancel</button>
                 </>
               )}
             </div>
@@ -88,9 +92,9 @@ export default function InvoicePreview() {
             {invoice.items && invoice.items.length > 0 && (
               <div className="mb-6">
                 <h3 className="text-lg font-semibold mb-3">Items</h3>
-                <div className="border rounded-lg overflow-hidden">
-                  <table className="w-full">
-                    <thead className="bg-gray-100">
+                <div className="border rounded-2xl overflow-hidden">
+                  <table className="data-table w-full">
+                    <thead>
                       <tr>
                         <th className="px-4 py-2 text-left">Description</th>
                         <th className="px-4 py-2 text-right">Qty</th>
@@ -101,7 +105,7 @@ export default function InvoicePreview() {
                     </thead>
                     <tbody>
                       {invoice.items.map((item, idx) => (
-                        <tr key={idx} className="border-t">
+                        <tr key={idx} className="border-t hover:bg-[#F7F5D6]">
                           <td className="px-4 py-2">{item.description || "Item"}</td>
                           <td className="px-4 py-2 text-right">{Number(item.qty ?? item.quantity ?? 1)}</td>
                           <td className="px-4 py-2 text-right">₹{(Number(item.price ?? item.unit_price ?? 0)).toFixed(2)}</td>
@@ -136,7 +140,7 @@ export default function InvoicePreview() {
                 </div>
               </div>
             </div>
-          </div>
+            </motion.div>
         ) : (
           <div className="p-4 bg-red-50 border border-red-200 rounded">Invoice not found</div>
         )}

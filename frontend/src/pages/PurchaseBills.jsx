@@ -4,6 +4,8 @@ import { useState } from "react"
 import Layout from "../components/Layout"
 import InvoiceUploader from "../components/InvoiceUploader"
 import apiClient from "../components/ApiClient"
+import { motion } from 'framer-motion'
+import { FaFileInvoice } from 'react-icons/fa'
 
 export default function PurchaseBills() {
   const [draft, setDraft] = useState(null)
@@ -53,17 +55,19 @@ export default function PurchaseBills() {
     <Layout>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Purchase Bills</h1>
+          <motion.h1 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="text-2xl font-semibold text-blueZodiac flex items-center gap-2">
+            <FaFileInvoice className="text-hippieBlue" size={24} /> Purchase Bills
+          </motion.h1>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Upload Bill</h2>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card card-top card-top-hippieBlue p-6">
+          <h2 className="text-lg font-semibold mb-4 text-blueZodiac">Upload Bill</h2>
           <InvoiceUploader onSuccess={handleUploadSuccess} uploadUrl={"http://localhost:5000/api/purchase-bills/upload"} fileFieldName={"bill_file"} />
-        </div>
+        </motion.div>
 
         {draft && (
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold mb-4">Auto Journal Preview</h2>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card card-top card-top-hippieBlue p-6">
+            <h2 className="text-lg font-semibold mb-4 text-blueZodiac">Auto Journal Preview</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-gray-600">Entry Date</p>
@@ -103,13 +107,13 @@ export default function PurchaseBills() {
               </div>
             </div>
             <div className="mt-4 flex items-center gap-3">
-              <button onClick={saveJournal} disabled={saving} className="px-4 py-2 bg-blue-600 text-white rounded-lg disabled:bg-gray-400">
+              <button onClick={saveJournal} disabled={saving} className="px-4 py-2 bg-goldenDream text-blueZodiac rounded-2xl disabled:bg-gray-300">
                 {saving ? "Saving..." : "Save Journal Entry"}
               </button>
               {savedEntry && <span className="text-green-700 text-sm">Saved entry #{savedEntry.id}</span>}
               {error && <span className="text-red-700 text-sm">{error}</span>}
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
     </Layout>

@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react"
 import Layout from "../components/Layout"
 import apiClient from "../components/ApiClient"
-import { BarChart3, TrendingUp, Users } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { FaChartBar, FaChartLine, FaUsers } from 'react-icons/fa'
 
 export default function Reports() {
   const [reports, setReports] = useState({
@@ -83,60 +84,62 @@ export default function Reports() {
   return (
     <Layout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold text-gray-800">Reports</h1>
+        <motion.h1 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="text-3xl font-semibold text-blueZodiac flex items-center gap-2">
+          <FaChartBar className="text-hippieBlue" size={28} /> Reports
+        </motion.h1>
 
         {loading ? (
           <div>Loading reports...</div>
         ) : (
           <>
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-xl font-bold mb-4">Analytics Filters</h2>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card card-top card-top-hippieBlue p-6">
+              <h2 className="card-title">Analytics Filters</h2>
               <div className="flex gap-2 mb-4 flex-wrap">
-                <button onClick={() => exportCSV("sales-register")} className="px-4 py-2 bg-blue-600 text-white rounded-lg">Preview Sales Register</button>
-                <button onClick={() => exportCSV("gstr1")} className="px-4 py-2 bg-green-600 text-white rounded-lg">Preview GSTR-1</button>
-                <button onClick={() => exportCSV("payment-register")} className="px-4 py-2 bg-purple-600 text-white rounded-lg">Preview Payments</button>
-                <button onClick={() => exportCSV("customer-master")} className="px-4 py-2 bg-orange-600 text-white rounded-lg">Preview Customer Master</button>
-                <button onClick={() => exportCSV("expense-register")} className="px-4 py-2 bg-indigo-600 text-white rounded-lg">Preview Expenses</button>
+                <button onClick={() => exportCSV("sales-register")} className="px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">Preview Sales Register</button>
+                <button onClick={() => exportCSV("gstr1")} className="px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">Preview GSTR-1</button>
+                <button onClick={() => exportCSV("payment-register")} className="px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">Preview Payments</button>
+                <button onClick={() => exportCSV("customer-master")} className="px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">Preview Customer Master</button>
+                <button onClick={() => exportCSV("expense-register")} className="px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">Preview Expenses</button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                   <label className="text-sm font-medium">Start Date</label>
-                  <input type="date" value={filters.start} onChange={(e) => setFilters({ ...filters, start: e.target.value })} className="w-full px-4 py-2 border rounded-lg" />
+                  <input type="date" value={filters.start} onChange={(e) => setFilters({ ...filters, start: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none" />
                 </div>
                 <div>
                   <label className="text-sm font-medium">End Date</label>
-                  <input type="date" value={filters.end} onChange={(e) => setFilters({ ...filters, end: e.target.value })} className="w-full px-4 py-2 border rounded-lg" />
+                  <input type="date" value={filters.end} onChange={(e) => setFilters({ ...filters, end: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none" />
                 </div>
                 <div>
                   <label className="text-sm font-medium">Branch ID (optional)</label>
-                  <input type="number" value={filters.branch} onChange={(e) => setFilters({ ...filters, branch: e.target.value })} className="w-full px-4 py-2 border rounded-lg" />
+                  <input type="number" value={filters.branch} onChange={(e) => setFilters({ ...filters, branch: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none" />
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {preview.visible && (
-              <div className="bg-white p-6 rounded-lg shadow-lg">
+              <div className="card card-top card-top-hippieBlue p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-bold">Preview: {preview.type}</h2>
                   <div className="flex gap-2">
-                    <button onClick={downloadCSV} className="px-4 py-2 bg-slate-900 text-white rounded-lg">Download CSV</button>
-                    <button onClick={() => setPreview({ type: "", headers: [], rows: [], visible: false })} className="px-4 py-2 bg-gray-300 rounded-lg">Close</button>
+                    <button onClick={downloadCSV} className="px-4 py-2 bg-[#5B88B2] text-white rounded-2xl hover:bg-[#4f79a0]">Download CSV</button>
+                    <button onClick={() => setPreview({ type: "", headers: [], rows: [], visible: false })} className="px-4 py-2 bg-gray-300 rounded-2xl">Close</button>
                   </div>
                 </div>
                 <div className="overflow-auto">
-                  <table className="min-w-full text-sm">
-                    <thead className="bg-gray-100">
+                  <table className="data-table min-w-full">
+                    <thead>
                       <tr>
                         {preview.headers.map((h, i) => (
-                          <th key={i} className="px-3 py-2 text-left font-semibold whitespace-nowrap">{h}</th>
+                          <th key={i} className="whitespace-nowrap">{h}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
                       {preview.rows.slice(0, 50).map((row, ri) => (
-                        <tr key={ri} className="border-t">
+                        <tr key={ri}>
                           {row.map((cell, ci) => (
-                            <td key={ci} className="px-3 py-2 whitespace-nowrap">{cell}</td>
+                            <td key={ci} className="whitespace-nowrap">{cell}</td>
                           ))}
                         </tr>
                       ))}
@@ -148,60 +151,60 @@ export default function Reports() {
             )}
 
             {/* Sales Summary */}
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <BarChart3 /> Sales Summary
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card card-top card-top-hippieBlue p-6">
+              <h2 className="text-xl font-semibold text-blueZodiac mb-4 flex items-center gap-2">
+                <FaChartBar className="text-hippieBlue" /> Sales Summary
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-4 bg-blue-50 rounded-lg">
+                <div className="card p-4">
                   <p className="text-gray-600 text-sm">Total Invoices</p>
-                  <p className="text-2xl font-bold text-blue-600">{reports.sales.total_invoices}</p>
+                  <p className="text-2xl font-bold text-[#122C4F]">{reports.sales.total_invoices}</p>
                 </div>
-                <div className="p-4 bg-green-50 rounded-lg">
+                <div className="card p-4">
                   <p className="text-gray-600 text-sm">Total Sales</p>
-                  <p className="text-2xl font-bold text-green-600">₹{(Number(reports.sales.total_sales) || 0).toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-[#122C4F]">₹{(Number(reports.sales.total_sales) || 0).toFixed(2)}</p>
                 </div>
-                <div className="p-4 bg-purple-50 rounded-lg">
-                  <p className="text-gray-600 text-sm">Avg Invoice</p>
-                  <p className="text-2xl font-bold text-purple-600">₹{(Number(reports.sales.avg_invoice_value) || 0).toFixed(2)}</p>
+                <div className="card p-4">
+                  <p className="text-gray-600 text_sm">Avg Invoice</p>
+                  <p className="text-2xl font-bold text-[#122C4F]">₹{(Number(reports.sales.avg_invoice_value) || 0).toFixed(2)}</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Tax Liability */}
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <TrendingUp /> Tax Liability
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card card-top card-top-hippieBlue p-6">
+              <h2 className="text-xl font-semibold text-blueZodiac mb-4 flex items-center gap-2">
+                <FaChartLine className="text-hippieBlue" /> Tax Liability
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="p-4 bg-orange-50 rounded-lg">
+                <div className="card p-4">
                   <p className="text-gray-600 text-sm">Total CGST</p>
-                  <p className="text-2xl font-bold text-orange-600">₹{(Number(reports.tax.total_cgst) || 0).toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-[#122C4F]">₹{(Number(reports.tax.total_cgst) || 0).toFixed(2)}</p>
                 </div>
-                <div className="p-4 bg-red-50 rounded-lg">
+                <div className="card p-4">
                   <p className="text-gray-600 text-sm">Total SGST</p>
-                  <p className="text-2xl font-bold text-red-600">₹{(Number(reports.tax.total_sgst) || 0).toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-[#122C4F]">₹{(Number(reports.tax.total_sgst) || 0).toFixed(2)}</p>
                 </div>
-                <div className="p-4 bg-yellow-50 rounded-lg">
+                <div className="card p-4">
                   <p className="text-gray-600 text-sm">Total IGST</p>
-                  <p className="text-2xl font-bold text-yellow-600">₹{(Number(reports.tax.total_igst) || 0).toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-[#122C4F]">₹{(Number(reports.tax.total_igst) || 0).toFixed(2)}</p>
                 </div>
-                <div className="p-4 bg-indigo-50 rounded-lg">
+                <div className="card p-4">
                   <p className="text-gray-600 text-sm">Total Tax</p>
-                  <p className="text-2xl font-bold text-indigo-600">₹{(Number(reports.tax.total_tax) || 0).toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-[#122C4F]">₹{(Number(reports.tax.total_tax) || 0).toFixed(2)}</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Top Customers */}
             {reports.topCustomers.length > 0 && (
-              <div className="bg-white p-6 rounded-lg shadow-lg">
-                <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                  <Users /> Top Customers
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card card-top card-top-hippieBlue p-6">
+                <h2 className="text-xl font-semibold text-blueZodiac mb-4 flex items-center gap-2">
+                  <FaUsers className="text-hippieBlue" /> Top Customers
                 </h2>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead className="bg-gray-100">
+                  <table className="data-table w-full">
+                    <thead>
                       <tr>
                         <th className="px-4 py-2 text-left">Customer</th>
                         <th className="px-4 py-2 text-left">Invoices</th>
@@ -210,32 +213,32 @@ export default function Reports() {
                     </thead>
                     <tbody>
                       {reports.topCustomers.map((customer) => (
-                        <tr key={customer.id} className="border-t">
-                          <td className="px-4 py-2">{customer.name}</td>
-                          <td className="px-4 py-2">{customer.invoice_count}</td>
-                          <td className="px-4 py-2 font-semibold">₹{(Number(customer.total_spent) || 0).toFixed(2)}</td>
+                        <tr key={customer.id}>
+                          <td>{customer.name}</td>
+                          <td>{customer.invoice_count}</td>
+                          <td className="font-semibold">₹{(Number(customer.total_spent) || 0).toFixed(2)}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-              </div>
+              </motion.div>
             )}
 
             {/* Expenses Summary */}
             {reports.expenses.length > 0 && (
-              <div className="bg-white p-6 rounded-lg shadow-lg">
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card card-top card-top-hippieBlue p-6">
                 <h2 className="text-xl font-bold mb-4">Expenses by Category</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {reports.expenses.map((expense, idx) => (
-                    <div key={idx} className="p-4 border rounded-lg">
+                    <div key={idx} className="card p-4">
                       <p className="text-gray-600 text-sm font-medium">{expense.category}</p>
                       <p className="text-xl font-bold">₹{(Number(expense.total_amount) || 0).toFixed(2)}</p>
                       <p className="text-xs text-gray-500 mt-1">{expense.count} entries</p>
                     </div>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             )}
 
           </>

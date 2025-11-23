@@ -100,14 +100,14 @@ export default function OrganizationSetup() {
   return (
     <Layout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold text-gray-800">Organization Setup</h1>
+        <h1 className="text-3xl font-semibold text-blueZodiac">Organization Setup</h1>
         {user?.role === "admin" ? (
-          <div className="bg-white p-6 rounded-lg shadow-lg space-y-6">
+          <div className="card card-top card-top-hippieBlue p-6 space-y-6">
             {error && <div className="p-3 bg-red-100 text-red-700 rounded">{error}</div>}
 
             {!user?.organization_id && (
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Create Business Account</h2>
+              <h2 className="text-xl font-semibold text-blueZodiac">Create Business Account</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="org-name" className="block text-sm font-medium mb-1">Business Name</label>
@@ -116,7 +116,7 @@ export default function OrganizationSetup() {
                     type="text"
                     value={orgData.name}
                     onChange={(e) => setOrgData({ ...orgData, name: e.target.value })}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
                   />
                 </div>
                 <div>
@@ -126,7 +126,7 @@ export default function OrganizationSetup() {
                     type="text"
                     value={orgData.gst_number}
                     onChange={(e) => setOrgData({ ...orgData, gst_number: e.target.value })}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -136,7 +136,7 @@ export default function OrganizationSetup() {
                     type="text"
                     value={orgData.address}
                     onChange={(e) => setOrgData({ ...orgData, address: e.target.value })}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
                   />
                 </div>
               </div>
@@ -144,7 +144,7 @@ export default function OrganizationSetup() {
             )}
 
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Primary Branch</h2>
+              <h2 className="text-xl font-semibold text-blueZodiac">Primary Branch</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="branch-name" className="block text-sm font-medium mb-1">Branch Name</label>
@@ -153,7 +153,7 @@ export default function OrganizationSetup() {
                     type="text"
                     value={branchData.name}
                     onChange={(e) => setBranchData({ ...branchData, name: e.target.value })}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
                   />
                 </div>
                 <div>
@@ -163,7 +163,7 @@ export default function OrganizationSetup() {
                     type="text"
                     value={branchData.gst_number}
                     onChange={(e) => setBranchData({ ...branchData, gst_number: e.target.value })}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -173,14 +173,14 @@ export default function OrganizationSetup() {
                     type="text"
                     value={branchData.address}
                     onChange={(e) => setBranchData({ ...branchData, address: e.target.value })}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
                   />
                 </div>
               </div>
             </div>
 
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Branding & Settings</h2>
+              <h2 className="text-xl font-semibold text-blueZodiac">Branding & Settings</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="org-logo" className="block text-sm font-medium mb-1">Upload Logo (optional)</label>
@@ -189,7 +189,7 @@ export default function OrganizationSetup() {
                     type="file"
                     accept="image/*"
                     onChange={(e) => setLogoFile(e.target.files?.[0] || null)}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
                   />
                   {logoFile && (
                     <p className="mt-1 text-xs text-gray-500">Selected: {logoFile.name}</p>
@@ -213,14 +213,14 @@ export default function OrganizationSetup() {
               <button
                 onClick={handleRegisterOrg}
                 disabled={loading}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                className="px-6 py-2 bg-goldenDream text-blueZodiac rounded-2xl hover:bg-[#e6c82f] disabled:opacity-50"
               >
                 {loading ? "Saving..." : "Complete Setup"}
               </button>
             </div>
 
             <div ref={userSetupRef} className="space-y-4 pt-6 border-t">
-              <h2 className="text-xl font-semibold">User Setup</h2>
+              <h2 className="text-xl font-semibold text-blueZodiac">User Setup</h2>
               <p className="text-sm text-gray-600">Add accountants or sales staff. This option is always available here.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -230,7 +230,7 @@ export default function OrganizationSetup() {
                     type="text"
                     value={userForm.name}
                     onChange={(e) => setUserForm({ ...userForm, name: e.target.value })}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
                   />
                 </div>
                 <div>
@@ -240,7 +240,7 @@ export default function OrganizationSetup() {
                     type="email"
                     value={userForm.email}
                     onChange={(e) => setUserForm({ ...userForm, email: e.target.value })}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
                   />
                 </div>
                 <div>
@@ -250,7 +250,7 @@ export default function OrganizationSetup() {
                     type="tel"
                     value={userForm.phone}
                     onChange={(e) => setUserForm({ ...userForm, phone: e.target.value })}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
                   />
                 </div>
                 <div>
@@ -259,7 +259,7 @@ export default function OrganizationSetup() {
                     id="user-role"
                     value={userForm.role}
                     onChange={(e) => setUserForm({ ...userForm, role: e.target.value })}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
                   >
                     <option value="accountant">Accountant</option>
                     <option value="sales">Sales Staff</option>
@@ -271,7 +271,7 @@ export default function OrganizationSetup() {
                     id="user-branch"
                     value={userForm.branchId}
                     onChange={(e) => setUserForm({ ...userForm, branchId: e.target.value })}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
                   >
                     <option value="">Select Branch (optional)</option>
                     {branches.map((b) => (
@@ -293,7 +293,7 @@ export default function OrganizationSetup() {
               <div className="flex gap-2">
                 <button
                   onClick={handleCreateUser}
-                  className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                  className="px-6 py-2 bg-goldenDream text-blueZodiac rounded-2xl hover:bg-[#e6c82f]"
                 >
                   Add User
                 </button>
@@ -301,7 +301,7 @@ export default function OrganizationSetup() {
             </div>
           </div>
         ) : (
-          <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+          <div className="bg-citrineWhite border border-yellow-200 p-4 rounded-2xl">
             <p className="text-sm text-yellow-800">Only admins can set up the organization.</p>
           </div>
         )}
