@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react"
 import Layout from "../components/Layout"
 import apiClient from "../components/ApiClient"
-import { Plus, Trash2 } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { FaUsers, FaPlus } from 'react-icons/fa'
 
 export default function Customers() {
   const [customers, setCustomers] = useState([])
@@ -68,17 +70,19 @@ export default function Customers() {
     <Layout>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-800">Customers</h1>
+          <motion.h1 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="text-3xl font-semibold text-blueZodiac flex items-center gap-2">
+            <FaUsers className="text-hippieBlue" size={28} /> Customers
+          </motion.h1>
           <button
             onClick={() => setShowForm(!showForm)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="flex items-center gap-2 px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]"
           >
-            <Plus size={20} /> Add Customer
+            <FaPlus size={16} /> Add Customer
           </button>
         </div>
 
         {showForm && (
-          <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg space-y-4">
+          <motion.form initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} onSubmit={handleSubmit} className="card card-top card-top-hippieBlue p-8 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="customer-name" className="block text-sm font-medium mb-1">Name</label>
@@ -88,7 +92,7 @@ export default function Customers() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
               <div>
@@ -98,7 +102,7 @@ export default function Customers() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
               <div>
@@ -108,7 +112,7 @@ export default function Customers() {
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
               <div>
@@ -118,7 +122,7 @@ export default function Customers() {
                   type="text"
                   value={formData.gstin}
                   onChange={(e) => setFormData({ ...formData, gstin: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
               <div>
@@ -128,7 +132,7 @@ export default function Customers() {
                   type="text"
                   value={formData.state_code}
                   onChange={(e) => setFormData({ ...formData, state_code: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
               <div>
@@ -138,7 +142,7 @@ export default function Customers() {
                   type="text"
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
               <div className="md:col-span-2">
@@ -148,12 +152,12 @@ export default function Customers() {
                   type="text"
                   value={formData.shipping_address}
                   onChange={(e) => setFormData({ ...formData, shipping_address: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
             </div>
             <div className="flex gap-2">
-              <button type="submit" className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+              <button type="submit" className="px-6 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">
                 Save
               </button>
               <button
@@ -164,15 +168,15 @@ export default function Customers() {
                 Cancel
               </button>
             </div>
-          </form>
+          </motion.form>
         )}
 
         {loading ? (
           <div>Loading...</div>
         ) : (
-          <div className="bg-white rounded-lg shadow-lg overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-100">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card card-top card-top-hippieBlue overflow-x-auto">
+            <table className="data-table w-full">
+              <thead>
                 <tr>
                   <th className="px-6 py-3 text-left font-semibold">Name</th>
                   <th className="px-6 py-3 text-left font-semibold">Email</th>
@@ -183,7 +187,7 @@ export default function Customers() {
               </thead>
               <tbody>
                 {customers.map((customer) => (
-                  <tr key={customer.id} className="border-t hover:bg-gray-50">
+                  <tr key={customer.id} className="border-t hover:bg-[#F7F5D6]">
                     <td className="px-6 py-3">{customer.name}</td>
                     <td className="px-6 py-3">{customer.email}</td>
                     <td className="px-6 py-3">{customer.phone}</td>
@@ -197,7 +201,7 @@ export default function Customers() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </motion.div>
         )}
       </div>
     </Layout>

@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react"
 import Layout from "../components/Layout"
 import apiClient from "../components/ApiClient"
-import { Plus, Trash2 } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { FaBoxOpen, FaPlus } from 'react-icons/fa'
 
 export default function Products() {
   const [products, setProducts] = useState([])
@@ -72,17 +74,19 @@ export default function Products() {
     <Layout>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-800">Products</h1>
+          <motion.h1 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="text-3xl font-semibold text-blueZodiac flex items-center gap-2">
+            <FaBoxOpen className="text-hippieBlue" size={28} /> Products
+          </motion.h1>
           <button
             onClick={() => setShowForm(!showForm)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="flex items-center gap-2 px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]"
           >
-            <Plus size={20} /> Add Product
+            <FaPlus size={16} /> Add Product
           </button>
         </div>
 
         {showForm && (
-          <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg space-y-4">
+          <motion.form initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} onSubmit={handleSubmit} className="card card-top card-top-hippieBlue p-8 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="product-name" className="block text-sm font-medium mb-1">Product Name</label>
@@ -92,7 +96,7 @@ export default function Products() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
               <div>
@@ -102,7 +106,7 @@ export default function Products() {
                   type="text"
                   value={formData.hsn_sac_code}
                   onChange={(e) => setFormData({ ...formData, hsn_sac_code: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
               <div>
@@ -113,7 +117,7 @@ export default function Products() {
                   value={formData.price}
                   onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                   required
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
               <div>
@@ -123,7 +127,7 @@ export default function Products() {
                   type="number"
                   value={formData.expected_gst_rate}
                   onChange={(e) => setFormData({ ...formData, expected_gst_rate: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
               <div>
@@ -133,7 +137,7 @@ export default function Products() {
                   type="number"
                   value={formData.stock}
                   onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
               <div className="md:col-span-2">
@@ -142,12 +146,12 @@ export default function Products() {
                   id="product-meta"
                   value={formData.meta}
                   onChange={(e) => setFormData({ ...formData, meta: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
             </div>
             <div className="flex gap-2">
-              <button type="submit" className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+              <button type="submit" className="px-6 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">
                 Save
               </button>
               <button
@@ -158,15 +162,15 @@ export default function Products() {
                 Cancel
               </button>
             </div>
-          </form>
+          </motion.form>
         )}
 
         {loading ? (
           <div>Loading...</div>
         ) : (
-          <div className="bg-white rounded-lg shadow-lg overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-100">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card card-top card-top-hippieBlue overflow-x-auto">
+            <table className="data-table w-full">
+              <thead>
                 <tr>
                   <th className="px-6 py-3 text-left font-semibold">Name</th>
                   <th className="px-6 py-3 text-left font-semibold">HSN/SAC</th>
@@ -178,7 +182,7 @@ export default function Products() {
               </thead>
               <tbody>
                 {products.map((product) => (
-                  <tr key={product.id} className="border-t hover:bg-gray-50">
+                  <tr key={product.id} className="border-t hover:bg-[#F7F5D6]">
                     <td className="px-6 py-3">{product.name}</td>
                     <td className="px-6 py-3">{product.hsn_sac_code}</td>
                     <td className="px-6 py-3">₹{product.price}</td>
@@ -193,7 +197,7 @@ export default function Products() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </motion.div>
         )}
       </div>
     </Layout>

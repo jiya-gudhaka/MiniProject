@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import Layout from "../components/Layout"
 import apiClient from "../components/ApiClient"
 import { useAuth } from "../context/AuthContext"
+import { motion } from 'framer-motion'
+import { FaDatabase } from 'react-icons/fa'
 
 export default function BackupRestore() {
   const { effectiveRole } = useAuth()
@@ -43,12 +45,14 @@ export default function BackupRestore() {
   return (
     <Layout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold text-gray-800">Backup & Restore</h1>
+        <motion.h1 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="text-3xl font-semibold text-blueZodiac flex items-center gap-2">
+          <FaDatabase className="text-hippieBlue" size={28} /> Backup & Restore
+        </motion.h1>
         {effectiveRole !== "admin" ? (
           <div className="p-4 bg-yellow-50 border border-yellow-200 rounded">Only the owner (Admin) can manage backups.</div>
         ) : (
           <div className="space-y-6">
-            <div className="bg-white p-6 rounded-lg shadow-lg">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-[#FBF9E3] p-8 rounded-2xl shadow-subtle border border-slate-200">
               <h2 className="text-xl font-semibold mb-4">Schedule</h2>
               {error && <div className="p-3 bg-red-100 text-red-700 rounded mb-3">{error}</div>}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -60,17 +64,17 @@ export default function BackupRestore() {
                   </select>
                 </div>
                 <div className="flex items-end gap-2">
-                  <button onClick={saveSchedule} className="px-4 py-2 bg-blue-600 text-white rounded-lg">Save</button>
-                  <button onClick={runBackup} className="px-4 py-2 bg-green-600 text-white rounded-lg">Run Backup</button>
+                  <button onClick={saveSchedule} className="px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">Save</button>
+                  <button onClick={runBackup} className="px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">Run Backup</button>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="bg-white p-6 rounded-lg shadow-lg">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-[#FBF9E3] p-8 rounded-2xl shadow-subtle border border-slate-200">
               <h2 className="text-xl font-semibold mb-4">Backup History</h2>
               <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead className="bg-gray-100">
+                <table className="data-table w-full">
+                  <thead>
                     <tr>
                       <th className="px-4 py-2 text-left">Time</th>
                       <th className="px-4 py-2 text-left">Provider</th>
@@ -79,7 +83,7 @@ export default function BackupRestore() {
                   </thead>
                   <tbody>
                     {history.map((h) => (
-                      <tr key={h.id} className="border-t">
+                      <tr key={h.id} className="border-t hover:bg-[#F7F5D6]">
                         <td className="px-4 py-2">{new Date(h.timestamp).toLocaleString()}</td>
                         <td className="px-4 py-2">{h.provider}</td>
                         <td className="px-4 py-2">{h.status}</td>
@@ -88,7 +92,7 @@ export default function BackupRestore() {
                   </tbody>
                 </table>
               </div>
-            </div>
+            </motion.div>
           </div>
         )}
       </div>

@@ -59,103 +59,103 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-600 to-slate-900">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Create Business Account</h2>
+    <div className="flex items-center justify-center min-h-screen bg-white">
+      <div className="bg-citrineWhite p-8 rounded-2xl shadow-subtle border border-slate-200 w-96">
+        <h2 className="text-3xl font-semibold mb-6 text-center text-blueZodiac">Create Business Account</h2>
 
         {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
+            <label className="block text-sm font-medium text-blueZodiac mb-1">Business Name</label>
             <input
               type="text"
               value={businessName}
               onChange={(e) => setBusinessName(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
               placeholder="Acme Pvt Ltd"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">GSTIN</label>
+              <label className="block text-sm font-medium text-blueZodiac mb-1">GSTIN</label>
               <input
                 type="text"
                 value={gstin}
                 onChange={(e) => setGstin(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
                 placeholder="22AAAAA0000A1Z5"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Owner Name</label>
+              <label className="block text-sm font-medium text-blueZodiac mb-1">Owner Name</label>
               <input
                 type="text"
                 value={ownerName}
                 onChange={(e) => setOwnerName(e.target.value)}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
                 placeholder="John Doe"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-blueZodiac mb-1">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
               placeholder="your@email.com"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+            <label className="block text-sm font-medium text-blueZodiac mb-1">Phone</label>
             <input
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
               placeholder="9876543210"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Locale</label>
+            <label className="block text-sm font-medium text-blueZodiac mb-1">Locale</label>
             <input
               type="text"
               value={locale}
               onChange={(e) => setLocale(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
               placeholder="en-IN"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-blueZodiac mb-1">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
               placeholder="••••••••"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+            <label className="block text-sm font-medium text-blueZodiac mb-1">Confirm Password</label>
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
               placeholder="••••••••"
             />
           </div>
@@ -163,15 +163,15 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="w-full py-2 bg-goldenDream text-blueZodiac font-semibold rounded-2xl hover:bg-[#e6c82f] disabled:opacity-50"
           >
             {loading ? "Creating account..." : "Sign Up"}
           </button>
         </form>
 
-        <p className="mt-4 text-center text-sm text-gray-600">
+        <p className="mt-4 text-center text-sm text-slate-600">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 hover:text-blue-700 font-semibold">
+          <Link to="/login" className="text-hippieBlue hover:text-blueZodiac font-semibold">
             Login
           </Link>
         </p>

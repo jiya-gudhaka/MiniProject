@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react"
 import Layout from "../components/Layout"
 import apiClient from "../components/ApiClient"
-import { Plus, Eye, Download, FileText } from 'lucide-react'
+import { Eye, Download } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { FaFileInvoiceDollar, FaPlus, FaFileAlt } from 'react-icons/fa'
 import InvoiceUploader from '../components/InvoiceUploader'
 
 export default function Invoices() {
@@ -264,31 +266,33 @@ export default function Invoices() {
     <Layout>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-800">Invoices</h1>
+          <motion.h1 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="text-3xl font-semibold text-blueZodiac flex items-center gap-2">
+            <FaFileInvoiceDollar className="text-hippieBlue" size={28} /> Invoices
+          </motion.h1>
           <div className="flex gap-2">
             <button
               onClick={() => setShowUploader(!showUploader)}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+              className="flex items-center gap-2 px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]"
             >
-              <Download size={20} /> Upload Invoice
+              <Download size={18} /> Upload Invoice
             </button>
             <button
               onClick={() => setShowForm(!showForm)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="flex items-center gap-2 px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]"
             >
-              <Plus size={20} /> Create Invoice
+              <FaPlus size={16} /> Create Invoice
             </button>
             <button
               onClick={handleGenerateReport}
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              className="flex items-center gap-2 px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]"
             >
-              <FileText size={20} /> Export Report
+              <FaFileAlt size={16} /> Export Report
             </button>
           </div>
         </div>
 
         {showUploader && (
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="card card-top card-top-hippieBlue p-8">
             <h3 className="text-lg font-semibold mb-4">Upload Invoice Image</h3>
             <InvoiceUploader onSuccess={handleOCRSuccess} />
             <button
@@ -297,11 +301,11 @@ export default function Invoices() {
             >
               Close
             </button>
-          </div>
+          </motion.div>
         )}
 
         {showForm && (
-          <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg space-y-4">
+          <motion.form initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} onSubmit={handleSubmit} className="card card-top card-top-hippieBlue p-8 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label htmlFor="invoice-customer" className="block text-sm font-medium mb-1">Customer</label>
@@ -310,7 +314,7 @@ export default function Invoices() {
                   value={formData.customer_id}
                   onChange={(e) => setFormData({ ...formData, customer_id: e.target.value })}
                   required
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 >
                   <option value="">Select Customer</option>
                   {customers.map((c) => (
@@ -326,7 +330,7 @@ export default function Invoices() {
                   id="invoice-type"
                   value={formData.invoice_type}
                   onChange={(e) => setFormData({ ...formData, invoice_type: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 >
                   <option>GST</option>
                   <option>Non-GST</option>
@@ -339,7 +343,7 @@ export default function Invoices() {
                   type="date"
                   value={formData.issue_date}
                   onChange={(e) => setFormData({ ...formData, issue_date: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
               <div>
@@ -349,7 +353,7 @@ export default function Invoices() {
                   type="text"
                   value={formData.invoice_number}
                   onChange={(e) => setFormData({ ...formData, invoice_number: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
               <div>
@@ -359,7 +363,7 @@ export default function Invoices() {
                   type="date"
                   value={formData.due_date}
                   onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
               <div>
@@ -369,7 +373,7 @@ export default function Invoices() {
                   type="text"
                   value={formData.place_of_supply_state}
                   onChange={(e) => setFormData({ ...formData, place_of_supply_state: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
               <div>
@@ -379,7 +383,7 @@ export default function Invoices() {
                   type="number"
                   value={formData.discount_amount}
                   onChange={(e) => setFormData({ ...formData, discount_amount: Number.parseFloat(e.target.value) || 0 })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
               <div>
@@ -389,7 +393,7 @@ export default function Invoices() {
                   type="number"
                   value={formData.rounding}
                   onChange={(e) => setFormData({ ...formData, rounding: Number.parseFloat(e.target.value) || 0 })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
                 />
               </div>
             </div>
@@ -459,7 +463,7 @@ export default function Invoices() {
                   <button
                     type="button"
                     onClick={handleAddItem}
-                    className="w-full px-3 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700"
+                    className="w-full px-3 py-2 bg-[#5B88B2] text-white rounded-2xl text-sm hover:bg-[#4f79a0]"
                   >
                     Add
                   </button>
@@ -467,7 +471,7 @@ export default function Invoices() {
               </div>
 
               {formData.items.length > 0 && (
-                <div className="bg-gray-50 p-3 rounded-lg text-sm max-h-48 overflow-y-auto">
+                <div className="bg-[#FBF9E3] p-3 rounded-2xl text-sm max-h-48 overflow-y-auto">
                   {formData.items.map((item, idx) => (
                     <div key={idx} className="flex justify-between py-1">
                       <span>{item.description || "Item"}</span>
@@ -479,7 +483,7 @@ export default function Invoices() {
             </div>
 
             <div className="flex gap-2">
-              <button type="submit" className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+              <button type="submit" className="px-6 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">
                 Create Invoice
               </button>
               <button
@@ -490,15 +494,15 @@ export default function Invoices() {
                 Cancel
               </button>
             </div>
-          </form>
+          </motion.form>
         )}
 
         {loading ? (
           <div>Loading...</div>
         ) : (
-          <div className="bg-white rounded-lg shadow-lg overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-100">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card card-top card-top-hippieBlue overflow-x-auto">
+            <table className="data-table w-full">
+              <thead>
                 <tr>
                   <th className="px-6 py-3 text-left font-semibold">Invoice</th>
                   <th className="px-6 py-3 text-left font-semibold">Customer</th>
@@ -510,18 +514,18 @@ export default function Invoices() {
               </thead>
               <tbody>
                 {invoices.map((inv) => (
-                  <tr key={inv.id} className="border-t hover:bg-gray-50">
+                  <tr key={inv.id} className="border-t hover:bg-[#F7F5D6]">
                     <td className="px-6 py-3 font-mono text-sm">{inv.invoice_number}</td>
                     <td className="px-6 py-3">{inv.customer_name}</td>
                     <td className="px-6 py-3 font-semibold">₹{(Number(inv.net_amount) || 0).toFixed(2)}</td>
                     <td className="px-6 py-3">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                        className={`${
                           inv.payment_status === "paid"
-                            ? "bg-green-100 text-green-800"
+                            ? "chip-green"
                             : inv.payment_status === "partial"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-red-100 text-red-800"
+                              ? "chip-yellow"
+                              : "chip-red"
                         }`}
                       >
                         {inv.payment_status}
@@ -530,12 +534,12 @@ export default function Invoices() {
                     <td className="px-6 py-3">{new Date(inv.issue_date).toLocaleDateString()}</td>
                     <td className="px-6 py-3">
                       <div className="flex gap-2">
-                        <button onClick={() => handleViewInvoice(inv.id)} className="text-blue-600 hover:text-blue-800" title="View Invoice">
+                        <button onClick={() => handleViewInvoice(inv.id)} className="text-[#5B88B2] hover:text-[#122C4F]" title="View Invoice">
                           <Eye size={18} />
                         </button>
                         <button
                           onClick={() => handleGeneratePDF(inv.id)}
-                          className="text-green-600 hover:text-green-800"
+                          className="text-[#5B88B2] hover:text-[#122C4F]"
                           title="Download PDF"
                         >
                           <Download size={18} />
@@ -546,16 +550,16 @@ export default function Invoices() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </motion.div>
         )}
 
         {/* Invoice Details Modal */}
         {showInvoiceDetails && selectedInvoice && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="card card-top card-top-hippieBlue max-w-4xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-800">Invoice Details</h2>
+                  <h2 className="text-2xl font-bold text-[#122C4F]">Invoice Details</h2>
                   <button
                     onClick={() => {
                       setShowInvoiceDetails(false)
@@ -584,12 +588,12 @@ export default function Invoices() {
                     <label className="text-sm font-medium text-gray-600">Status</label>
                     <p className="text-lg">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                        className={`${
                           selectedInvoice.payment_status === "paid"
-                            ? "bg-green-100 text-green-800"
+                            ? "chip-green"
                             : selectedInvoice.payment_status === "partial"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-red-100 text-red-800"
+                              ? "chip-yellow"
+                              : "chip-red"
                         }`}
                       >
                         {selectedInvoice.payment_status}
@@ -603,7 +607,7 @@ export default function Invoices() {
                     <h3 className="text-lg font-semibold mb-3">Items</h3>
                     <div className="border rounded-lg overflow-hidden">
                       <table className="w-full">
-                        <thead className="bg-gray-100">
+                        <thead className="bg-[#FBF9E3]">
                           <tr>
                             <th className="px-4 py-2 text-left">Description</th>
                             <th className="px-4 py-2 text-right">Qty</th>
@@ -664,7 +668,7 @@ export default function Invoices() {
                 <div className="mt-6 flex gap-2 justify-end">
                   <button
                     onClick={() => handleGeneratePDF(selectedInvoice.id)}
-                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"
+                    className="px-4 py-2 bg-[#5B88B2] text-white rounded-2xl hover:bg-[#4f79a0] flex items-center gap-2"
                   >
                     <Download size={18} />
                     Download PDF
@@ -694,7 +698,7 @@ export default function Invoices() {
                         alert("Error generating E-Way Bill: " + e.message)
                       }
                     }}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    className="px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]"
                   >
                     Generate E-Way Bill
                   </button>

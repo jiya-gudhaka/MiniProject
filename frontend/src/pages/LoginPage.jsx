@@ -34,39 +34,39 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-600 to-slate-900">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Login</h2>
+    <div className="flex items-center justify-center min-h-screen bg-white">
+      <div className="bg-citrineWhite p-8 rounded-2xl shadow-subtle border border-slate-200 w-96">
+        <h2 className="text-3xl font-semibold mb-6 text-center text-blueZodiac">Login</h2>
 
         {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-blueZodiac mb-1">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
               placeholder="your@email.com"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-blueZodiac mb-1">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-hippieBlue outline-none"
               placeholder="••••••••"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Login As</label>
+            <label className="block text-sm font-medium text-blueZodiac mb-1">Login As</label>
             <div className="flex gap-3">
               <label className="inline-flex items-center gap-2">
                 <input
@@ -104,15 +104,15 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="w-full py-2 bg-goldenDream text-blueZodiac font-semibold rounded-2xl hover:bg-[#e6c82f] disabled:opacity-50"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        <p className="mt-4 text-center text-sm text-gray-600">
+        <p className="mt-4 text-center text-sm text-slate-600">
           Don't have an account?{" "}
-          <Link to="/signup" className="text-blue-600 hover:text-blue-700 font-semibold">
+          <Link to="/signup" className="text-hippieBlue hover:text-blueZodiac font-semibold">
             Sign Up
           </Link>
         </p>
