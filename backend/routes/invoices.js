@@ -207,4 +207,19 @@ router.put("/:id/payment", async (req, res) => {
   }
 })
 
+// Update invoice dates
+router.put("/:id/dates", async (req, res) => {
+  const { issue_date, due_date } = req.body
+  try {
+    const result = await pool.query(
+      `UPDATE invoices SET issue_date = COALESCE($1, issue_date), due_date = COALESCE($2, due_date)
+       WHERE id = $3 AND organization_id = $4 RETURNING *`,
+      [issue_date || null, due_date || null, req.params.id, req.user.organizationId]
+    )
+    res.json(result.rows[0])
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+})
+
 export default router

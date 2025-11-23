@@ -14,6 +14,7 @@ export default function Reports() {
   })
   const [loading, setLoading] = useState(true)
   const [filters, setFilters] = useState({ start: "", end: "", branch: "" })
+  const [preview, setPreview] = useState({ type: "", headers: [], rows: [], visible: false })
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -48,14 +49,29 @@ export default function Reports() {
     if (filters.branch) params.append("branch", filters.branch)
     const url = `/reports/export/${type}?${params.toString()}`
     const resp = await apiClient.get(url, { responseType: "blob" })
+    const text = await resp.data.text()
+    const lines = text.split(/\r?\n/).filter(Boolean)
+    const headers = lines[0]?.split(",") || []
+    const rows = lines.slice(1).map((l) => l.split(","))
+    setPreview({ type, headers, rows, visible: true })
+  }
+
+  const downloadCSV = async () => {
+    if (!preview.type) return
+    const params = new URLSearchParams()
+    if (filters.start) params.append("start", filters.start)
+    if (filters.end) params.append("end", filters.end)
+    if (filters.branch) params.append("branch", filters.branch)
+    const url = `/reports/export/${preview.type}?${params.toString()}`
+    const resp = await apiClient.get(url, { responseType: "blob" })
     const blobUrl = window.URL.createObjectURL(new Blob([resp.data]))
     const a = document.createElement("a")
     a.href = blobUrl
     a.download = (
-      type === "sales-register" ? "Sales_Register_2025.csv" :
-      type === "gstr1" ? "GSTR1_Data.csv" :
-      type === "payment-register" ? "Payment_Register.csv" :
-      type === "customer-master" ? "Customer_Master.csv" :
+      preview.type === "sales-register" ? "Sales_Register_2025.csv" :
+      preview.type === "gstr1" ? "GSTR1_Data.csv" :
+      preview.type === "payment-register" ? "Payment_Register.csv" :
+      preview.type === "customer-master" ? "Customer_Master.csv" :
       "Expense_Register.csv"
     )
     document.body.appendChild(a)
@@ -75,6 +91,13 @@ export default function Reports() {
           <>
             <div className="bg-white p-6 rounded-lg shadow-lg">
               <h2 className="text-xl font-bold mb-4">Analytics Filters</h2>
+              <div className="flex gap-2 mb-4 flex-wrap">
+                <button onClick={() => exportCSV("sales-register")} className="px-4 py-2 bg-blue-600 text-white rounded-lg">Preview Sales Register</button>
+                <button onClick={() => exportCSV("gstr1")} className="px-4 py-2 bg-green-600 text-white rounded-lg">Preview GSTR-1</button>
+                <button onClick={() => exportCSV("payment-register")} className="px-4 py-2 bg-purple-600 text-white rounded-lg">Preview Payments</button>
+                <button onClick={() => exportCSV("customer-master")} className="px-4 py-2 bg-orange-600 text-white rounded-lg">Preview Customer Master</button>
+                <button onClick={() => exportCSV("expense-register")} className="px-4 py-2 bg-indigo-600 text-white rounded-lg">Preview Expenses</button>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                   <label className="text-sm font-medium">Start Date</label>
@@ -88,15 +111,41 @@ export default function Reports() {
                   <label className="text-sm font-medium">Branch ID (optional)</label>
                   <input type="number" value={filters.branch} onChange={(e) => setFilters({ ...filters, branch: e.target.value })} className="w-full px-4 py-2 border rounded-lg" />
                 </div>
-                <div className="flex items-end gap-2">
-                  <button onClick={() => exportCSV("sales-register")} className="px-4 py-2 bg-blue-600 text-white rounded-lg">Export Sales Register</button>
-                  <button onClick={() => exportCSV("gstr1")} className="px-4 py-2 bg-green-600 text-white rounded-lg">Export GSTR-1</button>
-                  <button onClick={() => exportCSV("payment-register")} className="px-4 py-2 bg-purple-600 text-white rounded-lg">Export Payments</button>
-                  <button onClick={() => exportCSV("customer-master")} className="px-4 py-2 bg-orange-600 text-white rounded-lg">Export Customer Master</button>
-                  <button onClick={() => exportCSV("expense-register")} className="px-4 py-2 bg-indigo-600 text-white rounded-lg">Export Expenses</button>
-                </div>
               </div>
             </div>
+
+            {preview.visible && (
+              <div className="bg-white p-6 rounded-lg shadow-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold">Preview: {preview.type}</h2>
+                  <div className="flex gap-2">
+                    <button onClick={downloadCSV} className="px-4 py-2 bg-slate-900 text-white rounded-lg">Download CSV</button>
+                    <button onClick={() => setPreview({ type: "", headers: [], rows: [], visible: false })} className="px-4 py-2 bg-gray-300 rounded-lg">Close</button>
+                  </div>
+                </div>
+                <div className="overflow-auto">
+                  <table className="min-w-full text-sm">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        {preview.headers.map((h, i) => (
+                          <th key={i} className="px-3 py-2 text-left font-semibold whitespace-nowrap">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {preview.rows.slice(0, 50).map((row, ri) => (
+                        <tr key={ri} className="border-t">
+                          {row.map((cell, ci) => (
+                            <td key={ci} className="px-3 py-2 whitespace-nowrap">{cell}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-xs text-gray-500 mt-2">Showing first 50 rows</p>
+              </div>
+            )}
 
             {/* Sales Summary */}
             <div className="bg-white p-6 rounded-lg shadow-lg">
@@ -188,6 +237,7 @@ export default function Reports() {
                 </div>
               </div>
             )}
+
           </>
         )}
       </div>

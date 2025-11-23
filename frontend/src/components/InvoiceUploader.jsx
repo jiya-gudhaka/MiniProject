@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Upload, Loader, AlertCircle } from 'lucide-react'
 
-export default function InvoiceUploader({ onSuccess }) {
+export default function InvoiceUploader({ onSuccess, uploadUrl = "http://localhost:5000/api/ocr/extract-invoice", fileFieldName = "invoice_image" }) {
   const [file, setFile] = useState(null)
   const [loading, setLoading] = useState(false)
   const [extractedData, setExtractedData] = useState(null)
@@ -75,10 +75,10 @@ export default function InvoiceUploader({ onSuccess }) {
       console.log("[v0] Uploading file:", file.name)
       
       const formData = new FormData()
-      formData.append("invoice_image", file)
+      formData.append(fileFieldName, file)
 
       setProgress("Processing with OCR...")
-      const response = await fetch("http://localhost:5000/api/ocr/extract-invoice", {
+      const response = await fetch(uploadUrl, {
         method: "POST",
         body: formData,
         headers: {

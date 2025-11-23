@@ -9,6 +9,7 @@ import Customers from "./pages/Customers"
 import Products from "./pages/Products"
 import Invoices from "./pages/Invoices"
 import Expenses from "./pages/Expenses"
+import PurchaseBills from "./pages/PurchaseBills"
 import Payments from "./pages/Payments"
 import Reports from "./pages/Reports"
 import TaxReturns from "./pages/TaxReturns"
@@ -68,6 +69,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <Expenses />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/expenses/purchase-bills"
+            element={
+              <ProtectedRoute>
+                <PurchaseBills />
               </ProtectedRoute>
             }
           />

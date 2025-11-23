@@ -111,7 +111,13 @@ def extract_fields(raw_text: str) -> dict:
     m = re.search(r'Taxable Amount[:\\s]*₹?\s*([0-9,]+\.\d{2})', full_text, re.I)
     result['Taxable Amount'] = m.group(1).replace(',', '') if m else None
 
-    m = re.search(r'IGST[:\\s]*([0-9,]+\.\d{2})', full_text, re.I)
+    m = re.search(r'CGST[:\\s]*₹?\s*([0-9,]+(?:\.\d{2})?)', full_text, re.I)
+    result['CGST Amount'] = m.group(1).replace(',', '') if m else None
+
+    m = re.search(r'SGST[:\\s]*₹?\s*([0-9,]+(?:\.\d{2})?)', full_text, re.I)
+    result['SGST Amount'] = m.group(1).replace(',', '') if m else None
+
+    m = re.search(r'IGST[:\\s]*₹?\s*([0-9,]+(?:\.\d{2})?)', full_text, re.I)
     result['IGST Amount'] = m.group(1).replace(',', '') if m else None
 
     m = re.search(r'(?:Total\s*Amount|Net Total)[:\\s]*₹?\s*([0-9,]+\.\d{2})', full_text, re.I)

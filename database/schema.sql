@@ -212,6 +212,27 @@ CREATE TABLE ewaybills (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
+-- Journal Entries Table
+CREATE TABLE journal_entries (
+  id SERIAL PRIMARY KEY,
+  organization_id INT REFERENCES organizations(id),
+  branch_id INT,
+  entry_date DATE NOT NULL,
+  reference_no VARCHAR(50),
+  vendor_id INT REFERENCES vendors(id),
+  description TEXT,
+  debit_account VARCHAR(100),
+  credit_account VARCHAR(100),
+  amount DECIMAL(12,2),
+  cgst_input DECIMAL(12,2) DEFAULT 0,
+  sgst_input DECIMAL(12,2) DEFAULT 0,
+  igst_input DECIMAL(12,2) DEFAULT 0,
+  total_amount DECIMAL(12,2),
+  entry_type VARCHAR(20) DEFAULT 'purchase',
+  ocr_json_path TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
 -- Create Indexes
 CREATE INDEX idx_invoices_org ON invoices(organization_id);
 CREATE INDEX idx_invoices_customer ON invoices(customer_id);

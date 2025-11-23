@@ -7,6 +7,7 @@ import { Plus, Trash2 } from 'lucide-react'
 
 export default function Expenses() {
   const [expenses, setExpenses] = useState([])
+  const [purchaseBills, setPurchaseBills] = useState([])
   const [showForm, setShowForm] = useState(false)
   const [loading, setLoading] = useState(true)
   const [formData, setFormData] = useState({
@@ -22,6 +23,7 @@ export default function Expenses() {
 
   useEffect(() => {
     fetchExpenses()
+    fetchPurchaseBills()
   }, [])
 
   const fetchExpenses = async () => {
@@ -32,6 +34,15 @@ export default function Expenses() {
       console.error("Failed to fetch expenses", err)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchPurchaseBills = async () => {
+    try {
+      const res = await apiClient.get("/purchase-bills?limit=50")
+      setPurchaseBills(res.data)
+    } catch (err) {
+      console.error("Failed to fetch purchase bills", err)
     }
   }
 
@@ -74,14 +85,54 @@ export default function Expenses() {
   return (
     <Layout>
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center flex-wrap gap-3">
           <h1 className="text-3xl font-bold text-gray-800">Expenses</h1>
-          <button
-            onClick={() => setShowForm(!showForm)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            <Plus size={20} /> Add Expense
-          </button>
+          <div className="flex items-center gap-2">
+            <a href="/expenses/purchase-bills" className="px-4 py-2 bg-indigo-600 text-white rounded-lg">Purchase Bills OCR</a>
+            <button
+              onClick={() => setShowForm(!showForm)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              <Plus size={20} /> Add Expense
+            </button>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-lg">
+          <h2 className="text-xl font-bold mb-4">Purchase Bills (OCR)</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-4 py-2 text-left">Bill #</th>
+                  <th className="px-4 py-2 text-left">Date</th>
+                  <th className="px-4 py-2 text-left">Vendor</th>
+                  <th className="px-4 py-2 text-right">Subtotal</th>
+                  <th className="px-4 py-2 text-right">Tax</th>
+                  <th className="px-4 py-2 text-right">Total</th>
+                  <th className="px-4 py-2 text-left">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {purchaseBills.map((pb) => (
+                  <tr key={pb.id} className="border-t hover:bg-gray-50">
+                    <td className="px-4 py-2">{pb.bill_number || pb.id}</td>
+                    <td className="px-4 py-2">{pb.bill_date ? new Date(pb.bill_date).toLocaleDateString() : "-"}</td>
+                    <td className="px-4 py-2">{pb.vendor_name || "-"}</td>
+                    <td className="px-4 py-2 text-right">₹{(Number(pb.subtotal) || 0).toFixed(2)}</td>
+                    <td className="px-4 py-2 text-right">₹{(Number(pb.cgst_amount) + Number(pb.sgst_amount) + Number(pb.igst_amount)).toFixed(2)}</td>
+                    <td className="px-4 py-2 text-right">₹{(Number(pb.net_amount) || 0).toFixed(2)}</td>
+                    <td className="px-4 py-2">{pb.status}</td>
+                  </tr>
+                ))}
+                {purchaseBills.length === 0 && (
+                  <tr>
+                    <td colSpan={7} className="px-4 py-6 text-center text-gray-500">No purchase bills found</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {showForm && (
