@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react"
 import Layout from "../components/Layout"
 import apiClient from "../components/ApiClient"
-import { Trash2 } from 'lucide-react'
-import { motion } from 'framer-motion'
-import { FaBoxOpen, FaPlus } from 'react-icons/fa'
+import { Trash2 } from "lucide-react"
+import { motion } from "framer-motion"
+import { FaBoxOpen, FaPlus } from "react-icons/fa"
 
 export default function Products() {
   const [products, setProducts] = useState([])
@@ -73,130 +73,218 @@ export default function Products() {
   return (
     <Layout>
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <motion.h1 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="text-3xl font-semibold text-blueZodiac flex items-center gap-2">
-            <FaBoxOpen className="text-hippieBlue" size={28} /> Products
-          </motion.h1>
-          <button
-            onClick={() => setShowForm(!showForm)}
-            className="flex items-center gap-2 px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]"
+        <div className="flex justify-between items-center flex-wrap gap-4">
+          <motion.h1
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl font-bold text-[#122C4F] flex items-center gap-3"
           >
-            <FaPlus size={16} /> Add Product
-          </button>
+            <div className="p-2 bg-gradient-to-br from-[#5B88B2] to-[#122C4F] rounded-xl">
+              <FaBoxOpen className="text-[#FBF9E3]" size={32} />
+            </div>
+            Products
+          </motion.h1>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowForm(!showForm)}
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#F0D637] to-[#e6c82f] text-[#122C4F] font-semibold rounded-xl hover:shadow-lg transition-all"
+          >
+            <FaPlus size={18} /> Add Product
+          </motion.button>
         </div>
 
         {showForm && (
-          <motion.form initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} onSubmit={handleSubmit} className="card card-top card-top-hippieBlue p-8 space-y-4">
+          <motion.form
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            onSubmit={handleSubmit}
+            className="bg-[#FBF9E3] p-8 rounded-2xl border-2 border-[#5B88B2]/20 shadow-lg space-y-6"
+          >
+            <h3 className="text-lg font-bold text-[#122C4F] mb-4">Create New Product</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="product-name" className="block text-sm font-medium mb-1">Product Name</label>
+              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
+                <label htmlFor="product-name" className="block text-sm font-semibold text-[#122C4F] mb-2">
+                  Product Name
+                </label>
                 <input
                   id="product-name"
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#F0D637] focus:border-[#F0D637] outline-none transition-all"
+                  placeholder="e.g., Premium Widget"
                 />
-              </div>
-              <div>
-                <label htmlFor="product-hsn" className="block text-sm font-medium mb-1">HSN/SAC Code</label>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
+                <label htmlFor="product-hsn" className="block text-sm font-semibold text-[#122C4F] mb-2">
+                  HSN/SAC Code
+                </label>
                 <input
                   id="product-hsn"
                   type="text"
                   value={formData.hsn_sac_code}
                   onChange={(e) => setFormData({ ...formData, hsn_sac_code: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5B88B2] focus:border-[#5B88B2] outline-none transition-all"
+                  placeholder="1234567890"
                 />
-              </div>
-              <div>
-                <label htmlFor="product-price" className="block text-sm font-medium mb-1">Price</label>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
+                <label htmlFor="product-price" className="block text-sm font-semibold text-[#122C4F] mb-2">
+                  Price (₹)
+                </label>
                 <input
                   id="product-price"
                   type="number"
                   value={formData.price}
                   onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                   required
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#F0D637] focus:border-[#F0D637] outline-none transition-all"
+                  placeholder="0.00"
                 />
-              </div>
-              <div>
-                <label htmlFor="product-gst" className="block text-sm font-medium mb-1">GST Rate (%)</label>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}>
+                <label htmlFor="product-gst" className="block text-sm font-semibold text-[#122C4F] mb-2">
+                  GST Rate (%)
+                </label>
                 <input
                   id="product-gst"
                   type="number"
                   value={formData.expected_gst_rate}
                   onChange={(e) => setFormData({ ...formData, expected_gst_rate: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5B88B2] focus:border-[#5B88B2] outline-none transition-all"
+                  placeholder="5, 12, 18..."
                 />
-              </div>
-              <div>
-                <label htmlFor="product-stock" className="block text-sm font-medium mb-1">Stock</label>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}>
+                <label htmlFor="product-stock" className="block text-sm font-semibold text-[#122C4F] mb-2">
+                  Stock
+                </label>
                 <input
                   id="product-stock"
                   type="number"
                   value={formData.stock}
                   onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#F0D637] focus:border-[#F0D637] outline-none transition-all"
+                  placeholder="0"
                 />
-              </div>
-              <div className="md:col-span-2">
-                <label htmlFor="product-meta" className="block text-sm font-medium mb-1">Meta</label>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.6 }}
+                className="md:col-span-2"
+              >
+                <label htmlFor="product-meta" className="block text-sm font-semibold text-[#122C4F] mb-2">
+                  Notes
+                </label>
                 <textarea
                   id="product-meta"
                   value={formData.meta}
                   onChange={(e) => setFormData({ ...formData, meta: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#5B88B2] outline-none"
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5B88B2] focus:border-[#5B88B2] outline-none transition-all"
+                  placeholder="Additional product information..."
+                  rows="3"
                 />
-              </div>
+              </motion.div>
             </div>
-            <div className="flex gap-2">
-              <button type="submit" className="px-6 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">
-                Save
-              </button>
-              <button
+            <div className="flex gap-3 pt-2">
+              <motion.button
+                type="submit"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-2.5 bg-gradient-to-r from-[#F0D637] to-[#e6c82f] text-[#122C4F] font-bold rounded-xl hover:shadow-lg transition-all"
+              >
+                Save Product
+              </motion.button>
+              <motion.button
                 type="button"
                 onClick={() => setShowForm(false)}
-                className="px-6 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-2.5 bg-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-400 transition-all"
               >
                 Cancel
-              </button>
+              </motion.button>
             </div>
           </motion.form>
         )}
 
         {loading ? (
-          <div>Loading...</div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex items-center justify-center py-12"
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+              className="w-8 h-8 border-4 border-[#5B88B2]/20 border-t-[#5B88B2] rounded-full"
+            />
+          </motion.div>
         ) : (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card card-top card-top-hippieBlue overflow-x-auto">
-            <table className="data-table w-full">
-              <thead>
-                <tr>
-                  <th className="px-6 py-3 text-left font-semibold">Name</th>
-                  <th className="px-6 py-3 text-left font-semibold">HSN/SAC</th>
-                  <th className="px-6 py-3 text-left font-semibold">Price</th>
-                  <th className="px-6 py-3 text-left font-semibold">GST Rate</th>
-                  <th className="px-6 py-3 text-left font-semibold">Stock</th>
-                  <th className="px-6 py-3 text-left font-semibold">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((product) => (
-                  <tr key={product.id} className="border-t hover:bg-[#F7F5D6]">
-                    <td className="px-6 py-3">{product.name}</td>
-                    <td className="px-6 py-3">{product.hsn_sac_code}</td>
-                    <td className="px-6 py-3">₹{product.price}</td>
-                    <td className="px-6 py-3">{product.expected_gst_rate}%</td>
-                    <td className="px-6 py-3">{product.stock}</td>
-                    <td className="px-6 py-3">
-                      <button onClick={() => handleDelete(product.id)} className="text-red-600 hover:text-red-800">
-                        <Trash2 size={18} />
-                      </button>
-                    </td>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-[#FBF9E3] rounded-2xl border-2 border-[#5B88B2]/10 shadow-lg overflow-hidden"
+          >
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-gradient-to-r from-[#122C4F] to-[#5B88B2] text-white">
+                    <th className="px-6 py-4 text-left font-semibold">Name</th>
+                    <th className="px-6 py-4 text-left font-semibold">HSN/SAC</th>
+                    <th className="px-6 py-4 text-left font-semibold">Price</th>
+                    <th className="px-6 py-4 text-left font-semibold">GST Rate</th>
+                    <th className="px-6 py-4 text-left font-semibold">Stock</th>
+                    <th className="px-6 py-4 text-left font-semibold">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {products.map((product, idx) => (
+                    <motion.tr
+                      key={product.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.05 }}
+                      className="border-t border-gray-200 hover:bg-[#F0D637]/10 transition-colors"
+                    >
+                      <td className="px-6 py-4 font-semibold text-[#122C4F]">{product.name}</td>
+                      <td className="px-6 py-4 text-gray-700">{product.hsn_sac_code || "-"}</td>
+                      <td className="px-6 py-4 font-semibold text-[#5B88B2]">₹{product.price}</td>
+                      <td className="px-6 py-4 text-gray-700">{product.expected_gst_rate}%</td>
+                      <td className="px-6 py-4">
+                        <span
+                          className={`px-3 py-1 rounded-lg font-semibold text-sm ${
+                            product.stock > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                          }`}
+                        >
+                          {product.stock}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <motion.button
+                          whileHover={{ scale: 1.2 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => handleDelete(product.id)}
+                          className="text-red-500 hover:text-red-700 transition-colors"
+                        >
+                          <Trash2 size={18} />
+                        </motion.button>
+                      </td>
+                    </motion.tr>
+                  ))}
+                  {products.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                        No products yet. Create one to get started!
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </motion.div>
         )}
       </div>
