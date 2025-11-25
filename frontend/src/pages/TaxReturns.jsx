@@ -3,8 +3,8 @@
 import { useState } from "react"
 import Layout from "../components/Layout"
 import apiClient from "../components/ApiClient"
-import { motion } from 'framer-motion'
-import { FaBalanceScale } from 'react-icons/fa'
+import { motion } from "framer-motion"
+import { FaBalanceScale, FaDownload, FaFileAlt } from "react-icons/fa"
 
 export default function TaxReturns() {
   const [start, setStart] = useState("")
@@ -22,7 +22,9 @@ export default function TaxReturns() {
       setGstr1(res.data)
     } catch (e) {
       setError(e.response?.data?.error || e.message)
-    } finally { setLoading(false) }
+    } finally {
+      setLoading(false)
+    }
   }
 
   const loadGSTR3B = async () => {
@@ -33,11 +35,16 @@ export default function TaxReturns() {
       setGstr3b(res.data)
     } catch (e) {
       setError(e.response?.data?.error || e.message)
-    } finally { setLoading(false) }
+    } finally {
+      setLoading(false)
+    }
   }
 
   const exportFile = async (path, filename) => {
-    const resp = await apiClient.get(path, { params: { start, end, format: path.includes("json") ? "json" : "csv" }, responseType: "blob" })
+    const resp = await apiClient.get(path, {
+      params: { start, end, format: path.includes("json") ? "json" : "csv" },
+      responseType: "blob",
+    })
     const url = window.URL.createObjectURL(new Blob([resp.data]))
     const a = document.createElement("a")
     a.href = url
@@ -51,65 +58,144 @@ export default function TaxReturns() {
   return (
     <Layout>
       <div className="space-y-6">
-        <motion.h1 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="text-3xl font-semibold text-blueZodiac flex items-center gap-2">
-          <FaBalanceScale className="text-hippieBlue" size={28} /> GST Returns
-        </motion.h1>
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3">
+          <div className="p-3 bg-gradient-to-br from-[#122C4F] to-[#5B88B2] rounded-2xl">
+            <FaBalanceScale className="text-[#F0D637]" size={24} />
+          </div>
+          <h1 className="text-3xl font-bold text-[#122C4F]">GST Returns</h1>
+        </motion.div>
 
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-[#FBF9E3] p-8 rounded-2xl shadow-subtle border border-slate-200">
-          <h2 className="text-xl font-semibold mb-4">Select Period</h2>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-[#FBF9E3] p-6 rounded-2xl shadow-md border border-slate-200"
+        >
+          <h2 className="text-lg font-semibold text-[#122C4F] mb-4">Select Return Period</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="text-sm font-medium">Start Date</label>
-              <input type="date" value={start} onChange={(e) => setStart(e.target.value)} className="w-full px-4 py-2 border rounded-lg" />
+              <label className="text-sm font-semibold text-[#122C4F] mb-2 block">Start Date</label>
+              <input
+                type="date"
+                value={start}
+                onChange={(e) => setStart(e.target.value)}
+                className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#5B88B2] outline-none bg-white"
+              />
             </div>
             <div>
-              <label className="text-sm font-medium">End Date</label>
-              <input type="date" value={end} onChange={(e) => setEnd(e.target.value)} className="w-full px-4 py-2 border rounded-lg" />
+              <label className="text-sm font-semibold text-[#122C4F] mb-2 block">End Date</label>
+              <input
+                type="date"
+                value={end}
+                onChange={(e) => setEnd(e.target.value)}
+                className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#5B88B2] outline-none bg-white"
+              />
             </div>
             <div className="flex items-end gap-2">
-              <button onClick={loadGSTR1} className="px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">Generate GSTR-1</button>
-              <button onClick={loadGSTR3B} className="px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">Generate GSTR-3B</button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={loadGSTR1}
+                className="flex-1 px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-full font-semibold hover:bg-[#e6c82f] transition-all shadow-sm"
+                disabled={loading}
+              >
+                {loading ? "Loading..." : "GSTR-1"}
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={loadGSTR3B}
+                className="flex-1 px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-full font-semibold hover:bg-[#e6c82f] transition-all shadow-sm"
+                disabled={loading}
+              >
+                {loading ? "Loading..." : "GSTR-3B"}
+              </motion.button>
             </div>
           </div>
-          {error && <div className="mt-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>}
+          {error && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="mt-4 p-4 bg-red-100 text-red-800 rounded-xl border border-red-300 flex items-start gap-2"
+            >
+              <span className="text-lg">⚠️</span>
+              <p>{error}</p>
+            </motion.div>
+          )}
         </motion.div>
 
         {gstr1 && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-[#FBF9E3] p-8 rounded-2xl shadow-subtle border border-slate-200">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-[#FBF9E3] p-6 rounded-2xl shadow-md border border-slate-200"
+          >
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">GSTR-1 Preview</h2>
-              <div className="flex gap-2">
-                <button onClick={() => exportFile("/tax/gstr1/export?format=json", "GSTR1_Data.json")} className="px-4 py-2 bg-[#5B88B2] text-white rounded-2xl hover:bg-[#4f79a0]">Download JSON</button>
-                <button onClick={() => exportFile("/tax/gstr1/export?format=csv", "GSTR1_Data.csv")} className="px-4 py-2 bg-[#5B88B2] text-white rounded-2xl hover:bg-[#4f79a0]">Download Excel/CSV</button>
-                <a href="https://www.gst.gov.in/" target="_blank" rel="noreferrer" className="px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">File on GST Portal</a>
+              <h2 className="text-lg font-semibold text-[#122C4F] flex items-center gap-2">
+                <FaFileAlt className="text-[#5B88B2]" /> GSTR-1 Preview
+              </h2>
+              <div className="flex gap-2 flex-wrap">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => exportFile("/tax/gstr1/export?format=json", "GSTR1_Data.json")}
+                  className="px-4 py-2 bg-[#5B88B2] text-white rounded-full hover:bg-[#4f79a0] transition-all font-medium flex items-center gap-2 shadow-sm"
+                >
+                  <FaDownload size={14} /> JSON
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => exportFile("/tax/gstr1/export?format=csv", "GSTR1_Data.csv")}
+                  className="px-4 py-2 bg-[#5B88B2] text-white rounded-full hover:bg-[#4f79a0] transition-all font-medium flex items-center gap-2 shadow-sm"
+                >
+                  <FaDownload size={14} /> Excel
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  as="a"
+                  href="https://www.gst.gov.in/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-full hover:bg-[#e6c82f] transition-all font-semibold"
+                >
+                  File on GST
+                </motion.button>
               </div>
             </div>
-            <div className="overflow-x-auto">
-              <table className="data-table w-full">
-                <thead>
+            <div className="overflow-x-auto rounded-xl border border-slate-200">
+              <table className="w-full text-sm">
+                <thead className="bg-gradient-to-r from-[#122C4F] to-[#5B88B2]">
                   <tr>
-                    <th className="px-3 py-2 text-left">Invoice No</th>
-                    <th className="px-3 py-2 text-left">Date</th>
-                    <th className="px-3 py-2 text-left">Value</th>
-                    <th className="px-3 py-2 text-left">POS</th>
-                    <th className="px-3 py-2 text-left">Taxable</th>
-                    <th className="px-3 py-2 text-left">IGST</th>
-                    <th className="px-3 py-2 text-left">CGST</th>
-                    <th className="px-3 py-2 text-left">SGST</th>
+                    <th className="px-4 py-3 text-left text-white font-semibold">Invoice No</th>
+                    <th className="px-4 py-3 text-left text-white font-semibold">Date</th>
+                    <th className="px-4 py-3 text-left text-white font-semibold">Value</th>
+                    <th className="px-4 py-3 text-left text-white font-semibold">POS</th>
+                    <th className="px-4 py-3 text-left text-white font-semibold">Taxable</th>
+                    <th className="px-4 py-3 text-left text-white font-semibold">IGST</th>
+                    <th className="px-4 py-3 text-left text-white font-semibold">CGST</th>
+                    <th className="px-4 py-3 text-left text-white font-semibold">SGST</th>
                   </tr>
                 </thead>
                 <tbody>
                   {gstr1.data.map((r, idx) => (
-                    <tr key={idx} className="border-t hover:bg-[#F7F5D6]">
-                      <td className="px-3 py-2 font-mono">{r.invoiceNumber}</td>
-                      <td className="px-3 py-2">{r.invoiceDate}</td>
-                      <td className="px-3 py-2">₹{Number(r.invoiceValue || 0).toFixed(2)}</td>
-                      <td className="px-3 py-2">{r.placeOfSupply}</td>
-                      <td className="px-3 py-2">₹{Number(r.taxableValue || 0).toFixed(2)}</td>
-                      <td className="px-3 py-2">₹{Number(r.igst || 0).toFixed(2)}</td>
-                      <td className="px-3 py-2">₹{Number(r.cgst || 0).toFixed(2)}</td>
-                      <td className="px-3 py-2">₹{Number(r.sgst || 0).toFixed(2)}</td>
-                    </tr>
+                    <motion.tr
+                      key={idx}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className={`border-t transition-colors ${idx % 2 === 0 ? "bg-white" : "bg-slate-50"} hover:bg-[#F7F5D6]`}
+                    >
+                      <td className="px-4 py-3 font-mono text-slate-700">{r.invoiceNumber}</td>
+                      <td className="px-4 py-3 text-slate-700">{r.invoiceDate}</td>
+                      <td className="px-4 py-3 font-semibold text-[#122C4F]">
+                        ₹{Number(r.invoiceValue || 0).toFixed(2)}
+                      </td>
+                      <td className="px-4 py-3 text-slate-700">{r.placeOfSupply}</td>
+                      <td className="px-4 py-3 text-slate-700">₹{Number(r.taxableValue || 0).toFixed(2)}</td>
+                      <td className="px-4 py-3 text-slate-700">₹{Number(r.igst || 0).toFixed(2)}</td>
+                      <td className="px-4 py-3 text-slate-700">₹{Number(r.cgst || 0).toFixed(2)}</td>
+                      <td className="px-4 py-3 text-slate-700">₹{Number(r.sgst || 0).toFixed(2)}</td>
+                    </motion.tr>
                   ))}
                 </tbody>
               </table>
@@ -118,21 +204,70 @@ export default function TaxReturns() {
         )}
 
         {gstr3b && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-[#FBF9E3] p-8 rounded-2xl shadow-subtle border border-slate-200">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-[#FBF9E3] p-6 rounded-2xl shadow-md border border-slate-200"
+          >
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">GSTR-3B Summary</h2>
-              <div className="flex gap-2">
-                <button onClick={() => exportFile("/tax/gstr3b/export?format=json", "GSTR3B_Summary.json")} className="px-4 py-2 bg-[#5B88B2] text-white rounded-2xl hover:bg-[#4f79a0]">Download JSON</button>
-                <button onClick={() => exportFile("/tax/gstr3b/export?format=csv", "GSTR3B_Summary.csv")} className="px-4 py-2 bg-[#5B88B2] text-white rounded-2xl hover:bg-[#4f79a0]">Download Excel/CSV</button>
-                <a href="https://www.gst.gov.in/" target="_blank" rel="noreferrer" className="px-4 py-2 bg-[#F0D637] text-[#122C4F] rounded-2xl hover:bg-[#e6c82f]">File on GST Portal</a>
+              <h2 className="text-lg font-semibold text-[#122C4F] flex items-center gap-2">
+                <FaFileAlt className="text-[#5B88B2]" /> GSTR-3B Summary
+              </h2>
+              <div className="flex gap-2 flex-wrap">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => exportFile("/tax/gstr3b/export?format=json", "GSTR3B_Summary.json")}
+                  className="px-4 py-2 bg-[#5B88B2] text-white rounded-full hover:bg-[#4f79a0] transition-all font-medium flex items-center gap-2 shadow-sm"
+                >
+                  <FaDownload size={14} /> JSON
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => exportFile("/tax/gstr3b/export?format=csv", "GSTR3B_Summary.csv")}
+                  className="px-4 py-2 bg-[#5B88B2] text-white rounded-full hover:bg-[#4f79a0] transition-all font-medium flex items-center gap-2 shadow-sm"
+                >
+                  <FaDownload size={14} /> Excel
+                </motion.button>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-              <div className="p-4 bg-[#FBF9E3] border rounded-2xl"><p className="text-sm text-gray-600">Taxable</p><p className="text-xl font-bold">₹{Number(gstr3b.summary.taxable || 0).toFixed(2)}</p></div>
-              <div className="p-4 bg-[#FBF9E3] border rounded-2xl"><p className="text-sm text-gray-600">CGST</p><p className="text-xl font-bold">₹{Number(gstr3b.summary.cgst || 0).toFixed(2)}</p></div>
-              <div className="p-4 bg-[#FBF9E3] border rounded-2xl"><p className="text-sm text-gray-600">SGST</p><p className="text-xl font-bold">₹{Number(gstr3b.summary.sgst || 0).toFixed(2)}</p></div>
-              <div className="p-4 bg-[#FBF9E3] border rounded-2xl"><p className="text-sm text-gray-600">IGST</p><p className="text-xl font-bold">₹{Number(gstr3b.summary.igst || 0).toFixed(2)}</p></div>
-              <div className="p-4 bg-[#FBF9E3] border rounded-2xl"><p className="text-sm text-gray-600">Cess</p><p className="text-xl font-bold">₹{Number(gstr3b.summary.cess || 0).toFixed(2)}</p></div>
+              <motion.div
+                whileHover={{ y: -4 }}
+                className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all"
+              >
+                <p className="text-xs font-medium text-slate-500 uppercase mb-2">Taxable</p>
+                <p className="text-2xl font-bold text-[#122C4F]">₹{Number(gstr3b.summary.taxable || 0).toFixed(0)}</p>
+              </motion.div>
+              <motion.div
+                whileHover={{ y: -4 }}
+                className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all"
+              >
+                <p className="text-xs font-medium text-slate-500 uppercase mb-2">CGST</p>
+                <p className="text-2xl font-bold text-blue-600">₹{Number(gstr3b.summary.cgst || 0).toFixed(0)}</p>
+              </motion.div>
+              <motion.div
+                whileHover={{ y: -4 }}
+                className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all"
+              >
+                <p className="text-xs font-medium text-slate-500 uppercase mb-2">SGST</p>
+                <p className="text-2xl font-bold text-green-600">₹{Number(gstr3b.summary.sgst || 0).toFixed(0)}</p>
+              </motion.div>
+              <motion.div
+                whileHover={{ y: -4 }}
+                className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all"
+              >
+                <p className="text-xs font-medium text-slate-500 uppercase mb-2">IGST</p>
+                <p className="text-2xl font-bold text-purple-600">₹{Number(gstr3b.summary.igst || 0).toFixed(0)}</p>
+              </motion.div>
+              <motion.div
+                whileHover={{ y: -4 }}
+                className="bg-gradient-to-br from-[#F0D637] to-[#e6c82f] p-5 rounded-xl border border-[#F0D637] shadow-sm hover:shadow-md transition-all"
+              >
+                <p className="text-xs font-medium text-[#122C4F] uppercase mb-2">Cess</p>
+                <p className="text-2xl font-bold text-[#122C4F]">₹{Number(gstr3b.summary.cess || 0).toFixed(0)}</p>
+              </motion.div>
             </div>
           </motion.div>
         )}

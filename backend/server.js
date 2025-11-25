@@ -1,6 +1,8 @@
 import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
+import path from "path"
+import { fileURLToPath } from "url"
 
 dotenv.config()
 
@@ -11,6 +13,20 @@ app.use(cors())
 app.use(express.json())
 app.use(express.static("pdfs"))
 app.use(express.static("reports"))
+
+// Serve frontend production build if present (optional)
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const frontendDist = path.join(__dirname, "..", "frontend", "dist")
+try {
+  // If dist exists, serve it
+  app.use(express.static(frontendDist))
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(frontendDist, "index.html"))
+  })
+} catch (err) {
+  // ignore if frontend build not present
+}
 
 app.get("/api/health", (req, res) => {
   console.log("[v0] Health check called")
