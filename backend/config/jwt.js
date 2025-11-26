@@ -1,7 +1,5 @@
 import jwt from "jsonwebtoken"
-import dotenv from "dotenv"
-
-dotenv.config() // ensures process.env.JWT_SECRET is loaded
+ // ensures process.env.JWT_SECRET is loaded
 
 const JWT_SECRET = process.env.JWT_SECRET
 const JWT_EXPIRE = "7d"
