@@ -1,10 +1,14 @@
+import dotenv from "dotenv";
+dotenv.config();
+
+
 import express from "express"
 import cors from "cors"
-import dotenv from "dotenv"
+
 import path from "path"
 import { fileURLToPath } from "url"
 
-dotenv.config()
+
 
 const app = express()
 
@@ -17,16 +21,7 @@ app.use(express.static("reports"))
 // Serve frontend production build if present (optional)
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const frontendDist = path.join(__dirname, "..", "frontend", "dist")
-try {
-  // If dist exists, serve it
-  app.use(express.static(frontendDist))
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(frontendDist, "index.html"))
-  })
-} catch (err) {
-  // ignore if frontend build not present
-}
+
 
 app.get("/api/health", (req, res) => {
   console.log("[v0] Health check called")
@@ -50,6 +45,9 @@ import taxRoutes from "./routes/tax.js"
 import backupRoutes from "./routes/backup.js"
 import purchaseBillsRoutes from "./routes/purchase-bills.js"
 import journalEntriesRoutes from "./routes/journal-entries.js"
+import gstr1 from "./routes/gstr1.js";
+
+
 
 app.use("/api/auth", authRoutes)
 app.use("/api/organizations", organizationRoutes)
@@ -67,6 +65,7 @@ app.use("/api/tax", taxRoutes)
 app.use("/api/backup", backupRoutes)
 app.use("/api/purchase-bills", purchaseBillsRoutes)
 app.use("/api/journal-entries", journalEntriesRoutes)
+app.use("/api/gstr1", gstr1)
 
 const PORT = process.env.PORT || 5000
 
@@ -79,3 +78,7 @@ app.listen(PORT, () => {
 process.on("unhandledRejection", (err) => {
   console.error("[v0] Unhandled Error:", err)
 })
+console.log("AVAILABLE ROUTES:");
+app._router.stack
+  .filter(r => r.route)
+  .forEach(r => console.log(r.route.path, Object.keys(r.route.methods)));
